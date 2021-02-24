@@ -1,0 +1,17 @@
+filebeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+
+processors:
+- add_cloud_metadata: ~
+
+setup.kibana.space.id: es-hands-on
+
+# 接続先、認証情報は cloud.id, cloud.auth で設定しているのでここでは不要
+output.elasticsearch:

@@ -1,0 +1,8 @@
+logging.level: info
+
+filebeat.modules:
+  - module: nginx
+
+setup.kibana.space.id: es-hands-on
+
+output.elasticsearch:

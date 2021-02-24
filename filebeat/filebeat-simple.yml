@@ -1,0 +1,9 @@
+logging.level: error
+
+filebeat.inputs:
+  - type: log
+    paths:
+      - /var/log/simple.log
+
+output.console:
+  pretty: true

@@ -1,0 +1,131 @@
+body {
+  text-align: left;
+  background-color: #282c34;
+  min-height: 100vh;
+  font-size: calc(12px + 1vmin);
+  color: #e5e5e5;
+}
+
+nav ol {
+  display: flex;
+  margin: 0px;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: calc(10px + 1vmin);
+}
+
+.Section {
+  width: 90vw;
+  margin: calc(10px + 1vmin);
+}
+
+.Navi {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(27, 148, 181);
+}
+
+#header {
+  width: 100%;
+  text-align: center;
+}
+
+#progressBar {
+  position: sticky;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  background-color: rgb(0, 108, 131);
+}
+
+#progressBarDone {
+  height: 10px;
+  background-color: rgb(27, 148, 181);
+}
+
+h2 {
+  margin-top: calc(30px + 5vmin);
+  padding-left: calc(5px + 1vmin);
+  border-left: 20px solid rgb(0, 88, 111);
+  border-bottom: 1px solid rgb(0, 88, 111);
+}
+
+pre {
+  margin: 0px;
+}
+
+.copy {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  margin-top: -25px;
+  top: calc(0.5em + 15px);
+}
+
+button {
+  border: none;
+  border-radius: 3px;
+  background-color: rgb(27, 148, 181);
+  color: rgb(0, 20, 50);
+  cursor: pointer;
+  padding: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+button:hover {
+  background-color: rgb(0, 108, 131);
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+a {
+  color: #61dafb;
+}
+
+li {
+  margin: calc(3px + 1vmin);
+}
+
+code {
+  font-family: Consolas, Monaco, "Andale Mono", monospace;
+  color: rgb(255, 198, 109);
+}
+
+blockquote {
+  border-left: 3px solid gray;
+  padding-left: calc(3px + 1vmin);
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: calc(10px + 1vmin);
+  margin-inline-end: calc(10px + 1vmin);
+}
+
+table {
+  min-width: 90vw;
+  background-color: #181c24;
+  border-collapse: collapse;
+  color: #f0f0f0;
+}
+
+th {
+  border: 1px solid #585c64;
+  background-color: #151515;
+  padding: calc(8px + 1vmin);
+}
+
+td {
+  border: 1px solid #585c64;
+  padding: calc(8px + 1vmin);
+}

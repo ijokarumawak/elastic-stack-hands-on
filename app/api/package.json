@@ -1,0 +1,14 @@
+{
+  "name": "web-app",
+  "version": "1.0.0",
+  "description": "Node.js on Docker",
+  "author": "Koji Kawamura <ijokarumawak@gmail.com>",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@elastic/elasticsearch": "^7.11",
+    "express": "^4.16.1"
+  }
+}

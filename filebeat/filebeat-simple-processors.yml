@@ -1,0 +1,28 @@
+logging.level: error
+
+filebeat.inputs:
+  - type: log
+    paths:
+      - /var/log/simple.log
+
+processors:
+  - dissect:
+      target_prefix: ""
+      overwrite_keys: true
+      tokenizer: "%{timestamp} %{log.level} %{message}"
+  - timestamp:
+      field: timestamp
+      layouts:
+        - "2006-01-02T15:04:05.999Z"
+  - drop_fields:
+      fields: [timestamp]
+  - script:
+      lang: javascript
+      id: lowercase
+      source: >
+        function process(event) {
+          event.Put("log.level", event.Get("log.level").toLowerCase());
+        }
+
+output.console:
+  pretty: true
