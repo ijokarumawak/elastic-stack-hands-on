@@ -1,0 +1,37 @@
+[
+  {
+    "csv": {
+      "field": "message",
+      "target_fields": [
+        "id",
+        "status",
+        "ts",
+        "item_count",
+        "item_id",
+        "item_name",
+        "item_category",
+        "item_price",
+        "item_description",
+        "item_created_at"
+      ],
+      "ignore_missing": false
+    }
+  },
+  {
+    "date": {
+      "field": "ts",
+      "timezone": "Asia/Tokyo",
+      "formats": [
+        "yyyy-MM-dd HH:mm:ss"
+      ]
+    }
+  },
+  {
+    "remove": {
+      "field": [
+        "message",
+        "ts"
+      ]
+    }
+  }
+]

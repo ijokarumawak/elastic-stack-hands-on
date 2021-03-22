@@ -1,0 +1,16 @@
+logging.level: info
+
+filebeat.inputs:
+  - type: log
+    index: es-hands-on-orders
+    pipeline: es-hands-on-orders-pipeline
+    exclude_lines:
+      # Skip header
+      - "^id,"
+    paths:
+      - /var/log/order_items.csv
+    close_eod: true
+    publisher_pipeline.disable_host: true
+
+output:
+  elasticsearch:
