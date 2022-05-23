@@ -1,11 +1,11 @@
 import React from 'react';
 import {
   BrowserRouter as Router,
-  Switch,
+  Routes,
   Route,
   Link,
   useLocation,
-  useHistory
+  useNavigate
 } from "react-router-dom";
 import './App.css';
 import {Markdown} from './Common.js'
@@ -61,9 +61,9 @@ function Home() {
 
 function Progressbar() {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   return (
-    <div id="progressBar" onClick={() => history.push('/')}>
+    <div id="progressBar" onClick={() => navigate('/')}>
       <div id="progressBarDone" style={{
         width: ((getContentIndex(location.pathname) + 1) * 100 / contents.length) + '%'
       }} />
@@ -83,28 +83,28 @@ function Navi() {
   );
 }
 
-function moveTo(history, location) {
-  history.push(location);
+function moveTo(navigate, location) {
+  navigate(location);
   document.body.scrollTop = 0; // For Safari
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
 
 
-function move(history, targetIndex) {
-  moveTo(history, contents[targetIndex].location);
+function move(navigate, targetIndex) {
+  moveTo(navigate, contents[targetIndex].location);
 }
 
 function Prev(props) {
-  const history = useHistory();
+  const navigate = useNavigate();
   return props.index > 0
-    ? <button onClick={() => move(history, props.index - 1)}>prev</button> : null;
+    ? <button onClick={() => move(navigate, props.index - 1)}>prev</button> : null;
 }
 
 function Next(props) {
-  const history = useHistory();
+  const navigate = useNavigate();
   return props.index < contents.length -1
-    ? <button onClick={() => move(history, props.index + 1)}>next</button>
-    : <button onClick={() => moveTo(history, '/goal')}>next</button>;
+    ? <button onClick={() => move(navigate, props.index + 1)}>next</button>
+    : <button onClick={() => moveTo(navigate, '/goal')}>next</button>;
 }
 
 function Header() {
@@ -126,10 +126,11 @@ class App extends React.Component {
     return (
       <Router>
         <div className="App">
-          <Switch>
+          <Routes>
             {contents.map((v, i) => {
               return (
-                <Route key={i} path={v.location}>
+                <Route key={i} path={v.location} element={
+                <React.Fragment>
                   <Progressbar />
                   <nav>
                     <ol>
@@ -145,12 +146,13 @@ class App extends React.Component {
                   <Header />
                   {v.tag}
                   <Footer />
-                </Route>
+                </React.Fragment>
+                } />
               )
             })}
-            <Route key="goal" path="/goal"><Goal /></Route>
-            <Route key="home" path="/"><Home /></Route>
-          </Switch>
+            <Route key="goal" path="/goal" element={<Goal />} />
+            <Route key="home" path="/" element={<Home />} />
+          </Routes>
         </div>
       </Router>
     );
