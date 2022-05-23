@@ -2,6 +2,9 @@
 
 このプロジェクトは手軽に Elastic Stack の色々な機能を試せるように作成されたハンズオン教材です。
 
+## 対象 Elastic Stack version
+7.11.x で動作確認をしています。
+
 ## 必要スペック
 - 2 CPU cores
 - 2 GB RAM
