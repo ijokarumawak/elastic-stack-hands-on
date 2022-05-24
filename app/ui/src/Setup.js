@@ -42,7 +42,7 @@ Elastic Cloud を利用するとデフォルトでセキュリティが有効に
 
 3. *Create a space* をクリックし、次を入力:
     - \`Name\` に "Elastic Stack ハンズオン"
-    - \`URL identifier\` の *customise* をクリックし、 "es-hands-on" とする
+    - \`URL identifier\` に "es-hands-on"
 
     *Create a space* をクリックして作成を完了します。
 

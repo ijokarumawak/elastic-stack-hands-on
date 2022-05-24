@@ -81,6 +81,8 @@ npm start
 bin/nginx.sh local
 ```
 
+- [ ] Add fleet
+- [ ] Authenticate with API key
 - [ ] Why specifying module names to load filebeat assets with `filebeat setup --modules nginx` didn't work as expected? How does filebeat uses the `--modules` option?
 - [ ] Why nginx metricbeat module didn't use `server_status_path` as expected? If I used the default path to expose nginx stub_status, it worked just fine. Probably I had to use the `raw` label
 - [x] How does Filebeat set ingest pipeline? For example `filebeat-7.11.1-nginx-access-pipeline` is set somehow from ECS fields I guess.
