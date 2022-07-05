@@ -28,55 +28,6 @@ import '@elastic/eui/dist/eui_theme_light.css';
 
 import { EuiProvider, EuiText } from '@elastic/eui';
 
-function MyApp() {
-
-  const themeKey = 'elastic-stack-hands-on.theme';
-  const [theme, setTheme] = useState(() => {
-    const saved = localStorage.getItem(themeKey);
-    return saved || 'light'
-  });
-  useEffect(() => {
-    localStorage.setItem(themeKey, theme);
-  }, [theme]);
-  const handleChange = function(event) {
-    setTheme(event.target.value);
-  }
-
-  return　(
-    <EuiProvider colorMode={theme}>
-      <EuiText>
-        <select value={theme} onChange={handleChange}>
-          <option value="light">light</option>
-          <option value="dark">dark</option>
-        </select>
-        <h1>This is Heading One</h1>
-        <p>
-         Far out in the uncharted backwaters of the{" "}
-         <a href="#">unfashionable</a> end of the western
-         spiral arm of the Galaxy lies a small unregarded
-         yellow sun. When suddenly some wild JavaScript
-         code appeared!{" "}
-        </p>
-      </EuiText>
-    </EuiProvider>
-  )
-}
-
-//const MyApp = ({ Page }) => (
-//  <EuiProvider colorMode={theme}>
-//    <EuiText>
-//      <h1>This is Heading One</h1>
-//      <p>
-//        Far out in the uncharted backwaters of the{" "}
-//        <a href="#">unfashionable</a> end of the western
-//        spiral arm of the Galaxy lies a small unregarded
-//        yellow sun. When suddenly some wild JavaScript
-//        code appeared!{" "}
-//      </p>
-//    </EuiText>
-//  </EuiProvider>
-//);
-
 const contents = [
   {location: '/intro', title: 'Elastic Stack とは', tag: <Intro />},
   {location: '/setup', title: 'ハンズオン環境のセットアップ', tag: <Setup />},
@@ -213,6 +164,41 @@ class App extends React.Component {
       </Router>
     );
   }
+}
+
+function MyApp() {
+
+  const themeKey = 'elastic-stack-hands-on.theme';
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem(themeKey);
+    return saved || 'light'
+  });
+  useEffect(() => {
+    localStorage.setItem(themeKey, theme);
+  }, [theme]);
+  const handleChange = function(event) {
+    setTheme(event.target.value);
+  }
+
+  return　(
+    <EuiProvider colorMode={theme}>
+      <EuiText>
+        <select value={theme} onChange={handleChange}>
+          <option value="light">light</option>
+          <option value="dark">dark</option>
+        </select>
+        <h1>This is Heading One</h1>
+        <p>
+         Far out in the uncharted backwaters of the{" "}
+         <a href="#">unfashionable</a> end of the western
+         spiral arm of the Galaxy lies a small unregarded
+         yellow sun. When suddenly some wild JavaScript
+         code appeared!{" "}
+        </p>
+      </EuiText>
+      <App />
+    </EuiProvider>
+  )
 }
 
 export default MyApp;
