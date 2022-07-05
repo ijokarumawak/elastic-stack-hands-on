@@ -1,4 +1,7 @@
-import React from 'react';
+import React, {
+  useState,
+  useEffect
+} from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -7,7 +10,6 @@ import {
   useLocation,
   useNavigate
 } from "react-router-dom";
-import './App.css';
 import {Markdown} from './Common.js'
 import Intro from './Intro.js'
 import Setup from './Setup.js'
@@ -20,6 +22,60 @@ import FilebeatSimple from './filebeat/Simple.js'
 import FilebeatModule from './filebeat/Module.js'
 import FilebeatDocker from './filebeat/Docker.js'
 import Goal from './Goal.js'
+
+import { css } from '@emotion/react';
+import '@elastic/eui/dist/eui_theme_light.css';
+
+import { EuiProvider, EuiText } from '@elastic/eui';
+
+function MyApp() {
+
+  const themeKey = 'elastic-stack-hands-on.theme';
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem(themeKey);
+    return saved || 'light'
+  });
+  useEffect(() => {
+    localStorage.setItem(themeKey, theme);
+  }, [theme]);
+  const handleChange = function(event) {
+    setTheme(event.target.value);
+  }
+
+  return　(
+    <EuiProvider colorMode={theme}>
+      <EuiText>
+        <select value={theme} onChange={handleChange}>
+          <option value="light">light</option>
+          <option value="dark">dark</option>
+        </select>
+        <h1>This is Heading One</h1>
+        <p>
+         Far out in the uncharted backwaters of the{" "}
+         <a href="#">unfashionable</a> end of the western
+         spiral arm of the Galaxy lies a small unregarded
+         yellow sun. When suddenly some wild JavaScript
+         code appeared!{" "}
+        </p>
+      </EuiText>
+    </EuiProvider>
+  )
+}
+
+//const MyApp = ({ Page }) => (
+//  <EuiProvider colorMode={theme}>
+//    <EuiText>
+//      <h1>This is Heading One</h1>
+//      <p>
+//        Far out in the uncharted backwaters of the{" "}
+//        <a href="#">unfashionable</a> end of the western
+//        spiral arm of the Galaxy lies a small unregarded
+//        yellow sun. When suddenly some wild JavaScript
+//        code appeared!{" "}
+//      </p>
+//    </EuiText>
+//  </EuiProvider>
+//);
 
 const contents = [
   {location: '/intro', title: 'Elastic Stack とは', tag: <Intro />},
@@ -159,4 +215,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default MyApp;
