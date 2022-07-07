@@ -1,12 +1,11 @@
 import React from 'react';
-import {Section, Markdown, Code} from './Common.js'
+import {Section, Code} from './Common.js'
+import {EuiMarkdownFormat} from '@elastic/eui';
 
 function Install() {
 
-  return <Section>
-<Markdown>{`
+  return <div><EuiMarkdownFormat>{`
 ## ハンズオンの内容
-
 このハンズオンでは、 Elasticsearch の API 利用方法から、 Kibana の操作、 Beats を使ったデータの取り込み方法などを実際に動かしながら学んでいきます。
 
 ## Elasticsearch、 Kibana のインストール
@@ -68,18 +67,12 @@ Kibana メインメニューから *Management* にある *Dev Tools* を選択�
 - Kibana へのアクセス
 - \`filebeat-*\`, \`metricbeat-*\`, \`es-hands-on*\` インデックスへの読み書き権限
 
-`}</Markdown>
-
-<ol>
-<li>
-<Markdown>{`
 それでは、 Kibana Console から次の API を実行し、該当のユーザを作成しましょう
  (同様の操作は Kibana UI からも可能です)。
 まずはユーザの権限を制御するロールを作成します:
-`}</Markdown>
 
-<Code language='json'>
-{`PUT _security/role/es-hands-on
+\`\`\`json
+PUT _security/role/es-hands-on
 {
   "cluster" : [
     "monitor",
@@ -122,64 +115,43 @@ Kibana メインメニューから *Management* にある *Dev Tools* を選択�
       ]
     }
   ]
-}`}
-</Code>
-</li>
+}
+\`\`\`
 
-<li>
-<Markdown>続いて、そのロールを持ったユーザを作成します:</Markdown>
+続いて、そのロールを持ったユーザを作成します:
 
-<Code language='json'>
-{`PUT _security/user/es-hands-on
+\`\`\`json
+PUT _security/user/es-hands-on
 {
   "roles" : [
     "es-hands-on"
   ],
   "full_name" : "Elastic Stack Hands On",
   "password": "Password!123"
-}`}
-</Code>
-</li>
+}
+\`\`\`
 
-<li>
-<Markdown>{`
 一度 Kibana からログアウトして、 \`es-hands-on\` ユーザでログインし直しましょう。
-`}</Markdown>
-</li>
-</ol>
 
-<Markdown>{`
 ### ハンズオンアプリの接続先設定
-`}</Markdown>
 
-<ol>
-<li>
-<Markdown>{`
 作成したユーザと接続先の情報をハンズオンアプリにも設定しましょう。
 *bin/env.sh* で:
 - 接続先 Elastic Cloud デプロイメントの \`ELASTIC_CLOUD_ID\` を指定してください。 Cloud Id は Elastic Cloud 管理コンソールで取得できます。
 - \`HANDS_ON_KEY\` にハンズオン環境内でユニークな値を入力してください、これは同一の Elasticsearch クラスタを複数名でシェアする際に他の参加者の方と作業が重複しないためのものです。ご自身の環境を使っている場合は \`default\` のままで構いません。
-`}</Markdown>
-</li>
 
-<li>
-<Markdown>{`
 その後、 API サーバを起動しましょう:
-`}</Markdown>
 
-<Code language='bash'>
+\`\`\`json
 bin/app-api.sh
-</Code>
-</li>
-<li>
-<Markdown>
+\`\`\`
+
 このハンズオン環境に設定されているユーザが、必要な権限を持っているかチェックしてみましょう。
 次の *show* ボタンを押すと、 API サーバを経由して Elasticsearch の [has_privileges API](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-has-privileges.html) を実行した結果を返します:
-</Markdown>
+`}
+</EuiMarkdownFormat>
 <ElasticsearchPrivileges />
-</li>
-</ol>
-</Section>;
+</div>
 }
 
 class ElasticsearchPrivileges extends React.Component {
@@ -231,14 +203,10 @@ class ElasticsearchPrivileges extends React.Component {
   }
 }
 
-class Setup extends React.Component {
-  render() {
-    return (
-      <div>
-        <Install />
-      </div>
-    );
-  }
+export default () => {
+  return (
+    <div>
+      <Install />
+    </div>
+  );
 }
-
-export default Setup;

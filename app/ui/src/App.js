@@ -24,9 +24,19 @@ import FilebeatDocker from './filebeat/Docker.js'
 import Goal from './Goal.js'
 
 import { css } from '@emotion/react';
-import '@elastic/eui/dist/eui_theme_light.css';
 
-import { EuiProvider, EuiText } from '@elastic/eui';
+import {
+  EuiProvider,
+  EuiPageTemplate,
+  EuiHeader,
+  EuiHeaderSection,
+  EuiHeaderSectionItem,
+  EuiSideNav,
+  EuiTitle,
+  EuiText,
+  EuiSelect,
+  htmlIdGenerator
+} from '@elastic/eui';
 
 const contents = [
   {location: '/intro', title: 'Elastic Stack とは', tag: <Intro />},
@@ -128,46 +138,46 @@ function Footer() {
   </div>);
 }
 
-class App extends React.Component {
-  render() {
-    return (
-      <Router>
-        <div className="App">
-          <Routes>
-            {contents.map((v, i) => {
-              return (
-                <Route key={i} path={v.location} element={
-                <React.Fragment>
-                  <Progressbar />
-                  <nav>
-                    <ol>
-                      {contents.map((v, i) => {
-                        return (
-                          <li key={i}>
-                            <ContentLink to={v.location} />
-                          </li>
-                        )
-                      })}
-                    </ol>
-                  </nav>
-                  <Header />
-                  {v.tag}
-                  <Footer />
-                </React.Fragment>
-                } />
-              )
-            })}
-            <Route key="goal" path="/goal" element={<Goal />} />
-            <Route key="home" path="/" element={<Home />} />
-          </Routes>
-        </div>
-      </Router>
-    );
-  }
-}
+function SideNav() {
+  const [isSideNavOpenOnMobile, setisSideNavOpenOnMobile] = useState(false);
 
-function MyApp() {
+  const toggleOpenOnMobile = () => {
+    setisSideNavOpenOnMobile(!isSideNavOpenOnMobile);
+  };
 
+  const navigate = useNavigate();
+
+  const sideNavItems = contents.map((v, i) => {
+    return {
+      name: v.title,
+      id: htmlIdGenerator('basicExample')(),
+      onClick: () => {
+        moveTo(navigate, v.location);
+      }
+    };
+  });
+
+  const sideNav = [
+    {
+      name: 'Root item',
+      id: htmlIdGenerator('basicExample')(),
+      items: sideNavItems
+    },
+  ];
+
+  return (
+    <EuiSideNav
+      aria-label="Basic example"
+      mobileTitle="Basic example"
+      toggleOpenOnMobile={() => toggleOpenOnMobile()}
+      isOpenOnMobile={isSideNavOpenOnMobile}
+      items={sideNavItems}
+    />
+  );
+};
+
+
+function App() {
   const themeKey = 'elastic-stack-hands-on.theme';
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem(themeKey);
@@ -179,26 +189,65 @@ function MyApp() {
   const handleChange = function(event) {
     setTheme(event.target.value);
   }
+  const themes = [{value: 'light', text: 'Light'}, {value: 'dark', text: 'Dark'}]
 
-  return　(
-    <EuiProvider colorMode={theme}>
-      <EuiText>
-        <select value={theme} onChange={handleChange}>
-          <option value="light">light</option>
-          <option value="dark">dark</option>
-        </select>
-        <h1>This is Heading One</h1>
-        <p>
-         Far out in the uncharted backwaters of the{" "}
-         <a href="#">unfashionable</a> end of the western
-         spiral arm of the Galaxy lies a small unregarded
-         yellow sun. When suddenly some wild JavaScript
-         code appeared!{" "}
-        </p>
-      </EuiText>
-      <App />
-    </EuiProvider>
-  )
+  return (
+    <Router>
+      <Routes>
+        {contents.map((v, i) => {
+          return (
+            <Route key={i} path={v.location} element={
+            <React.Fragment>
+              <Progressbar />
+
+              {/*
+              instead of importing css, link css
+              https://github.com/elastic/eui/discussions/2574#discussioncomment-3043796
+              $ cp -p ./node_modules/@elastic/eui/dist/eui_theme_dark.css public/
+              $ cp -p ./node_modules/@elastic/eui/dist/eui_theme_light.css public/
+              */}
+              <link
+                  rel="stylesheet"
+                  type="text/css"
+                  href={theme == 'light' ? "/eui_theme_light.css" : "/eui_theme_dark.css"}
+              />
+              <EuiProvider colorMode={theme}>
+                <EuiHeader theme={theme}>
+                  <EuiHeaderSection>
+                    <EuiHeaderSectionItem>
+                      <EuiTitle size="s"><h1>Elastic Stack Hands-on</h1></EuiTitle>
+                    </EuiHeaderSectionItem>
+                    <EuiHeaderSectionItem>
+                      <Header />
+                    </EuiHeaderSectionItem>
+                  </EuiHeaderSection>
+                  <EuiHeaderSection>
+                    <EuiHeaderSectionItem>
+                      <EuiSelect
+                        options={themes}
+                        value={theme}
+                        onChange={handleChange}
+                        compressed={true}
+                      />
+                    </EuiHeaderSectionItem>
+                  </EuiHeaderSection>
+                </EuiHeader>
+                <EuiPageTemplate pageSideBar={<SideNav />}>
+                  {v.tag}
+                  <Footer />
+                </EuiPageTemplate>
+              </EuiProvider>
+            </React.Fragment>
+            } />
+          )
+        })}
+        <Route key="goal" path="/goal" element={<Goal />} />
+        <Route key="home" path="/" element={<Home />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default MyApp;
+
+
+export default App;
