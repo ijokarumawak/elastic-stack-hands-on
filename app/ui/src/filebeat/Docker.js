@@ -1,11 +1,9 @@
-import React from 'react';
-import {Section, Markdown, Code} from '../Common.js'
+import {EuiMarkdownFormat} from '@elastic/eui';
 
-class Docker extends React.Component {
-  render() {
-    return (
-<Section>
-<Markdown>{`
+function Docker() {
+  return (
+
+<EuiMarkdownFormat>{`
 ## Docker の Auto Discover を使ってみよう
 
 最近では、 Web アプリケーションをマイクロサービスアーキテクチャで実装し、コンテナライズして運用することも増えてきました。
@@ -19,28 +17,27 @@ Filebeat には Docker コンテナや、 Kubernetes で利用できる Auto Dis
 
 ![](../images/beat-auto-discover.png)
 
-`}</Markdown>
 
-<h3>Filebeat でログを収集</h3>
-<ol>
-<li>
+### Filebeat でログを収集
+
 次のコマンドで Filebeat を実行してみましょう:
-<Code language="bash">bin/filebeat-docker.sh</Code>
-</li>
-<li>
-<Markdown>設定のキモになる部分は *filebeat/filebeat-docker.yml* の以下の部分です:</Markdown>
-<Code language="yaml" copy="false">{`
+\`\`\`bash
+bin/filebeat-docker.sh
+\`\`\`
+
+設定のキモになる部分は *filebeat/filebeat-docker.yml* の以下の部分です:
+\`\`\`yaml
 filebeat.autodiscover:
   providers:
     - type: docker
       hints.enabled: true
-`}</Code>
-</li>
-<li>
+\`\`\`
+
 Docker コンテナ起動時に指定するラベルをヒントとして自動的にログ収集をおこないます。
-<Markdown>例えば、このハンズオンテキストを表示している Nginx の Docker コンテナ起動の設定をみてみましょう。
-*bin/nginx.sh* には、次のようにラベルが設定されています:</Markdown>
-<Code language="bash" copy="false">{`
+例えば、このハンズオンテキストを表示している Nginx の Docker コンテナ起動の設定をみてみましょう。
+*bin/nginx.sh* には、次のようにラベルが設定されています:
+
+\`\`\`bash
 docker run --rm --name \${CONTAINER_NAME} $network -d -p 80:80 \\
   --volume="$(pwd)/nginx/templates-$target:/etc/nginx/templates:ro" \\
   --volume="$(pwd)/nginx/auth:/etc/nginx/auth:ro" \\
@@ -54,28 +51,20 @@ docker run --rm --name \${CONTAINER_NAME} $network -d -p 80:80 \\
   --label co.elastic.metrics/password=\${ELASTIC_PASSWORD} \\
   --label co.elastic.metrics/server_status_path="/nginx_status" \\
   nginx
-`}</Code>
-</li>
-</ol>
+\`\`\`
 
-<h3>Metricbeat でログを収集</h3>
-<ol>
-<li>
+### Metricbeat でメトリックを収集
+
 次のコマンドで Metricbeat を実行してみましょう:
-<Code language="bash">bin/metricbeat-docker.sh</Code>
-<Markdown>
-</Markdown></li>
-</ol>
+\`\`\`bash
+bin/metricbeat-docker.sh
+\`\`\`
 
-<h3>Kibana の Observability 画面で収集したデータを分析</h3>
-<Markdown>
+### Kibana の Observability 画面で収集したデータを分析
 Kibana の *Observability* には、 Metrics や Logs など、収集したオブザーバビリティデータを可視化、分析するための便利な画面が用意されています。
 ぜひ色々触って試してみてください。
-</Markdown>
-
-</Section>
-    );
-  }
+`}</EuiMarkdownFormat>
+  );
 }
 
 export default Docker;
