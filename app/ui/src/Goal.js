@@ -1,9 +1,8 @@
-import {EuiMarkdownFormat} from '@elastic/eui';
+import {EuiPage, EuiMarkdownFormat} from '@elastic/eui';
 
-function Goal(props) {
+function Goal() {
   return (
-  <>
-  <h1>おつかれさまでした 🎉</h1>
+<EuiPage>
 <EuiMarkdownFormat>{`
 Elastic スタックの理解を深めるには、色々な情報ソースがあります。
 是非ご覧ください:
@@ -17,9 +16,11 @@ Elastic スタックの理解を深めるには、色々な情報ソースがあ
 - [Discuss](https://discuss.elastic.co/c/in-your-native-tongue/japanese/18) 日本語での質問、疑問が可能なフォーラム
 - [Elastic 語りチャンネル](https://stand.fm/channels/5fbf3981c6465465908d4b66) 音声コンテンツでゆるりと情報収集
 - [demo.elastic.co](https://demo.elastic.co/) 誰でも使えるデモ環境、データセットも揃っているので色々な機能を試すことができる
+
+[back to top](/)
+
 `}</EuiMarkdownFormat>
-  <a href="/">back to top</a>
-  </>);
+</EuiPage>);
 }
 
 

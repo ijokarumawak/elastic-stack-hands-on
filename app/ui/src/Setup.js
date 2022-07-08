@@ -1,6 +1,6 @@
 import React from 'react';
 import {Section, Code} from './Common.js'
-import {EuiMarkdownFormat} from '@elastic/eui';
+import {EuiMarkdownFormat, EuiCodeBlock} from '@elastic/eui';
 
 function Install() {
 
@@ -194,9 +194,9 @@ class ElasticsearchPrivileges extends React.Component {
           <>
             <button onClick={() => this.handleClose()}>close</button>
             <p>{this.state.hasPrivileges[0].has_all_requested ? "ユーザ権限の確認が成功しました!" : "ユーザ権限の確認に失敗しました。"}</p>
-            <Code language='json' copy="false">
+            <EuiCodeBlock>
             {JSON.stringify(this.state.hasPrivileges[0], null, 2)}
-            </Code>
+            </EuiCodeBlock>
           </>
         )}
       </Section>;

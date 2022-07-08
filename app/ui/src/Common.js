@@ -10,18 +10,3 @@ export function Section(props) {
   return (<div className="Section">{props.children}</div>);
 }
 
-export function Markdown(props) {
-  return <ReactMarkdown plugins={[gfm]} >{props.children}</ReactMarkdown>;
-}
-
-export function Code(props) {
-  return (
-  <>
-    <CopyToClipboard text={props.children.trim()}>
-      {((typeof props.copy) === 'undefined') || props.copy === true
-        ? (<div className="copy"><button>copy</button></div>) : <div />}
-    </CopyToClipboard>
-    <SyntaxHighlighter language={props.language} style={syntaxStyle}>{props.children.trim()}</SyntaxHighlighter>
-  </>
-  );
-}
