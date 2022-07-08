@@ -3,7 +3,7 @@
 このプロジェクトは手軽に Elastic Stack の色々な機能を試せるように作成されたハンズオン教材です。
 
 ## 対象 Elastic Stack version
-7.11.x で動作確認をしています。
+8.3.x で動作確認をしています。
 
 ## 必要スペック
 - 2 CPU cores
@@ -81,7 +81,10 @@ npm start
 bin/nginx.sh local
 ```
 
-- [ ] Add fleet
+- [x] Minimize container image size. node:14 (950MB) -> node:14-alpine (126MB)
+- [ ] Add Logstash https://www.docker.elastic.co/
+- [ ] Add Python app example https://elasticsearch-py.readthedocs.io/en/v8.3.2/ write some sample app?
+- [ ] Add fleet & agent
 - [ ] Authenticate with API key
 - [ ] Why specifying module names to load filebeat assets with `filebeat setup --modules nginx` didn't work as expected? How does filebeat uses the `--modules` option?
 - [ ] Why nginx metricbeat module didn't use `server_status_path` as expected? If I used the default path to expose nginx stub_status, it worked just fine. Probably I had to use the `raw` label

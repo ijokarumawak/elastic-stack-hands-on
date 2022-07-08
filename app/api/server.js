@@ -22,29 +22,13 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-const sendEsResult = (err, expRes, esRes, callback) => {
-  if (err) {
-    console.log(err);
-    expRes.send(err);
-  } else {
-    callback(expRes, esRes);
-  }
+function sendEsResult(expRes, esRes) {
+  expRes.send(esRes);
 }
 
-const renderEsResult = (err, expRes, esRes) => {
-  console.log(JSON.stringify({
-    err:err,
-    req: {
-      url: expRes.req.url,
-      method: expRes.req.method,
-      param: expRes.req.params,
-      query: expRes.req.query
-    },
-    esRes:esRes
-  }));
-  sendEsResult(err, expRes, esRes, (expRes, esRes) => {
-   expRes.send(esRes);
-  });
+function sendEsError(expRes, esRes) {
+  console.log(JSON.stringify(esRes));
+  expRes.send(esRes);
 }
 
 app.get('/es', (req, res) => {
@@ -55,8 +39,22 @@ app.get('/es', (req, res) => {
         match: { hello: 'world' }
       }
     }
-  }, (err, result) => renderEsResult(err, res, result));
+  }).then((esRes) => sendEsResult(res, esRes))
+    .catch((esRes) => sendEsError(res, esRes));
 });
+
+app.get('/es-error', (req, res) => {
+  es.search({
+    index: 'filebeat-*',
+    body: {
+      query: {
+        fail: { hello: 'world' }
+      }
+    }
+  }).then((esRes) => sendEsResult(res, esRes))
+    .catch((esRes) => sendEsError(res, esRes));
+});
+
 
 app.get('/has-privileges', (req, res) => {
   es.security.hasPrivileges({
@@ -79,7 +77,8 @@ app.get('/has-privileges', (req, res) => {
         }
       ]
     }
-  }, (err, result) => renderEsResult(err, res, result.body));
+  }).then((esRes) => sendEsResult(res, esRes))
+    .catch((esRes) => sendEsError(res, esRes));
 });
 
 // TODO: get id of es-hands-on-xxx dashboard.

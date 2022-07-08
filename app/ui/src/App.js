@@ -233,7 +233,6 @@ function App() {
           type="text/css"
           href={theme == 'light' ? "/eui_theme_light.css" : "/eui_theme_dark.css"}
       />
-      <Progressbar />
       <EuiProvider colorMode={theme}>
         <EuiHeader>
           <EuiShowFor sizes={['m', 'l', 'xl']}>

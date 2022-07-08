@@ -1,6 +1,12 @@
 import React from 'react';
-import {Section, Code} from './Common.js'
-import {EuiMarkdownFormat, EuiCodeBlock} from '@elastic/eui';
+import {
+  EuiFlexGroup,
+  EuiFlexItem,
+  EuiMarkdownFormat,
+  EuiCodeBlock,
+  EuiButton,
+  EuiSpacer
+} from '@elastic/eui';
 
 function Install() {
 
@@ -140,7 +146,7 @@ PUT _security/user/es-hands-on
 - 接続先 Elastic Cloud デプロイメントの \`ELASTIC_CLOUD_ID\` を指定してください。 Cloud Id は Elastic Cloud 管理コンソールで取得できます。
 - \`HANDS_ON_KEY\` にハンズオン環境内でユニークな値を入力してください、これは同一の Elasticsearch クラスタを複数名でシェアする際に他の参加者の方と作業が重複しないためのものです。ご自身の環境を使っている場合は \`default\` のままで構いません。
 
-その後、 API サーバを起動しましょう:
+その後、接続情報を反映させるため、次のコマンドで API サーバを再起動しましょう:
 
 \`\`\`json
 bin/app-api.sh
@@ -188,18 +194,29 @@ class ElasticsearchPrivileges extends React.Component {
   }
 
   render() {
-    return <Section>
-        <button onClick={() => this.handleRefresh()}>{this.state.hasPrivileges ? "refresh" : "show"}</button>
+    return <>
+        <EuiSpacer size="s" />
+        <EuiFlexGroup>
+          <EuiFlexItem grow={false}>
+            <EuiButton onClick={() => this.handleRefresh()}>{this.state.hasPrivileges ? "refresh" : "show"}</EuiButton>
+          </EuiFlexItem>
+          {this.state.hasPrivileges && (
+          <EuiFlexItem grow={false}>
+            <EuiButton onClick={() => this.handleClose()}>close</EuiButton>
+          </EuiFlexItem>
+          )}
+        </EuiFlexGroup>
+        <EuiSpacer size="s" />
+
         {this.state.hasPrivileges && (
           <>
-            <button onClick={() => this.handleClose()}>close</button>
             <p>{this.state.hasPrivileges[0].has_all_requested ? "ユーザ権限の確認が成功しました!" : "ユーザ権限の確認に失敗しました。"}</p>
             <EuiCodeBlock>
             {JSON.stringify(this.state.hasPrivileges[0], null, 2)}
             </EuiCodeBlock>
           </>
         )}
-      </Section>;
+      </>;
   }
 }
 
