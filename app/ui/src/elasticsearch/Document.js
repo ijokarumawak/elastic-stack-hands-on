@@ -1,13 +1,15 @@
 import {EuiMarkdownFormat} from '@elastic/eui';
 
 function Document() {
-   return (
+  const now = new Date();
+  now.setDate(now.getDate() - 1);
+  const today = now.toJSON().split('T')[0];
+  return (
 
 <EuiMarkdownFormat>{`
 ## ドキュメントを保存、検索してみよう
 
-Elasticsearch は REST API を実装していて、送信する HTTP リクエストのメソッド (GET, POST, PUT, DELETE) と、
-送信先の URL で直感的にリクエストの内容がわかります。
+Elasticsearch は REST API を実装しています。送信する HTTP リクエストのメソッド (GET, POST, PUT, DELETE) と、送信先の URL で直感的にリクエストの内容がわかります。
 例えばドキュメント操作 API の URL は \`index名\` / _doc / \`ドキュメントID\` となっています。
 
 Elasticsearch では JSON ドキュメントを格納する場所のことをインデックスといいます。
@@ -18,7 +20,7 @@ Elasticsearch では JSON ドキュメントを格納する場所のことをイ
 \`\`\`json
 PUT es-hands-on-${process.env.REACT_APP_KEY}/_doc/1
 {
-  "@timestamp": "2021-02-01T10:00:00+09:00",
+  "@timestamp": "${today}T10:00:00+09:00",
   "labels.api": "PUT _doc",
   "message": "ドキュメント 1 を保存"
 }
@@ -33,7 +35,7 @@ GET es-hands-on-${process.env.REACT_APP_KEY}/_doc/1
 \`\`\`json
 POST es-hands-on-${process.env.REACT_APP_KEY}/_doc
 {
-  "@timestamp": "2021-02-02T10:00:00+09:00",
+  "@timestamp": "${today}T10:00:00+09:00",
   "labels.api": "POST _doc",
   "message": "ID を指定せずにドキュメントを保存"
 }
@@ -43,11 +45,11 @@ POST es-hands-on-${process.env.REACT_APP_KEY}/_doc
 \`\`\`json
 POST es-hands-on-${process.env.REACT_APP_KEY}/_bulk
 {"index":{"_id":2}}
-{"@timestamp": "2021-02-03T10:00:00+09:00", "labels.api": "_bulk", "message":"バルクで複数更新処理を一括実行"}
+{"@timestamp": "${today}T10:00:00+09:00", "labels.api": "_bulk", "message":"バルクで複数更新処理を一括実行"}
 {"index":{"_id":3}}
-{"@timestamp": "2021-02-03T11:00:00+09:00", "labels.api": "_bulk", "message":"複数のドキュメントを効率的に保存"}
+{"@timestamp": "${today}T11:00:00+09:00", "labels.api": "_bulk", "message":"複数のドキュメントを効率的に保存"}
 {"index":{"_id":4}}
-{"@timestamp": "2021-02-03T12:00:00+09:00", "labels.api": "_bulk", "message":"削除や更新も実行できる"}
+{"@timestamp": "${today}T12:00:00+09:00", "labels.api": "_bulk", "message":"削除や更新も実行できる"}
 {"delete": {"_id":4}}
 \`\`\`
 

@@ -30,8 +30,11 @@ function Module() {
 
 を知っています。対応するモジュールがあればそれを使うだけで分析可能な状態で取り込むことが可能です。
 
-ハンズオン環境には、 Nginx モジュールを有効にした Filebeat 設定ファイルと、
-サンプルの access.log があり、 Docker を使って簡単に試せるようになっています。
+ハンズオン環境には、 Nginx モジュールを有効にした Filebeat 設定ファイルと、サンプルの access.log があり、 Docker を使って簡単に試せるようになっています。
+
+\`\`\`bash
+filebeat/filebeat-module-nginx.sh
+\`\`\`
 
 ![](../images/filebeat-nginx.png)
 `}</EuiMarkdownFormat>

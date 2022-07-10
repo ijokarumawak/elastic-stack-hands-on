@@ -6,7 +6,7 @@ function Simple() {
 <EuiMarkdownFormat>{`
 ## Filebeat でログを取り込もう
 
-Elasticsearch に保存したデータは Kibana で様々な分析、可視化が可能になります。
+Elasticsearch に保存したデータは Kibana で様々な分析、可視化できます。
 ですが、そもそも Elasticsearch にデータを集めるにはどうしたらよいでしょうか。
 Elasticsearch を導入した後、最大限に活用できるかどうかは、必要なデータを色々なデータソースから収集できるかどうかがカギになります。
 
@@ -23,19 +23,13 @@ Docker を使って Filebeat が実行できるようにしてあります。
 ![](../images/filebeat-simple.png)
 
 次のシェルを実行すると、 CentOS をベースイメージとする Filebeat の Docker コンテナが起動します。
-その際、ローカルマシンにある *filebeat-simple.yml* を Filebeat の設定ファイルである \`filebeat.yml\` として、
-また、 *simple.log* を CentOS 上の */var/log/simple.log* としてマウントします。
-そして、コンテナ内で Filebeat が起動する仕組みです:
+その際、ローカルマシンにある *filebeat-simple.yml* を Filebeat の設定ファイルである \`filebeat.yml\` として、 *simple.log* を CentOS 上の */var/log/simple.log* としてマウントします。コンテナ内で Filebeat が起動する仕組みです:
 
 \`\`\`bash
-bin/filebeat-simple.sh
+filebeat/filebeat-simple.sh
 \`\`\`
 
-設定ファイルの中身は非常にシンプルです。 \`log\` インプットとしてテキストファイルの末尾を捕獲し、新しいエントリを収集します。
-そしてコンソールに出力するだけです。
-
-あらかじめ用意されていた 3行のデータの読み取りが終わると、次の行が追記されるのを待ちます。
-Ctrl + C で終了しましょう:
+設定ファイルの中身は非常にシンプルです。 \`log\` インプットとしてテキストファイルの末尾を捕獲し、新しいエントリを収集します。それをコンソールに出力するだけです。
 
 \`\`\`yaml
 logging.level: error
@@ -49,23 +43,25 @@ output.console:
   pretty: true
 \`\`\`
 
-この設定では何も加工していないので、ログの情報がそのまま \`message\` フィールドとして出力されています。
-入力のログデータは非常にシンプルですが、 Filebeat によりホスト名やログの場所など色々なメタデータが付与されているのが分かります。
+あらかじめ用意されていた 3行のデータの読み取りが終わると、次の行が追記されるのを待ちます。 Ctrl + C で終了しましょう。
+
+この設定では何も加工していないので、ログの情報がそのまま \`message\` フィールドとして出力されています。入力のログデータは非常にシンプルですが、 Filebeat によりホスト名やログの場所など色々なメタデータが付与されているのが分かります。
 
 \`\`\`
+# 入力データ
 2021-02-25T14:05:11.061Z INFO Message1
 \`\`\`
 
-また \`@timestamp\` フィールドには Filebeat がログを処理したタイムスタンプが設定されています。
-ログ情報としてのイベントが発生した日時とは異なりますね。
+また \`@timestamp\` フィールドには Filebeat がログを処理したタイムスタンプが設定されています。ログ情報としてのイベントが発生した日時とは異なりますね。
 
 \`\`\`json
+# 出力結果
 {
   "@timestamp": "2021-03-02T01:33:55.006Z",
   "@metadata": {
     "beat": "filebeat",
     "type": "_doc",
-    "version": "7.11.1"
+    "version": "8.3.2"
   },
   "input": {
     "type": "log"
@@ -78,11 +74,11 @@ output.console:
     "id": "4decdb60-1d56-40f9-9a66-5908df6ad65f",
     "name": "9fb7ac5bbd49",
     "type": "filebeat",
-    "version": "7.11.1",
+    "version": "8.3.2",
     "hostname": "9fb7ac5bbd49"
   },
   "ecs": {
-    "version": "1.6.0"
+    "version": "8.0.0"
   },
   "log": {
     "offset": 0,
@@ -94,18 +90,20 @@ output.console:
 }
 \`\`\`
 
+## Filebeat でログを加工しよう
+
 それでは、ログメッセージを加工してみましょう。
 タイムスタンプ、ログレベル、メッセージの三つのフィールドに分割してみます。
-Filebeat でデータの加工をする場合、 \`processor\` で行います。
+Filebeat でデータの加工をする場合、 [\`processor\`](https://www.elastic.co/guide/en/beats/filebeat/current/defining-processors.html) で行います。
 
 通常 Filebeat はログの発生元であるアプリケーションやサービスと同じマシンにデプロイします。
 対象に負荷を与えないように、 Filebeat での加工は最低限にするのがベストプラクティスです。
-複雑な加工が必要な場合は Elasticsearch の *Ingest Node Pipeline* を使います。
+複雑な加工が必要な場合は Elasticsearch の [*Ingest Node Pipeline*](https://www.elastic.co/guide/en/elasticsearch/reference/current/ingest.html) を使います。
 
 次のシェルを実行してみましょう:
 
 \`\`\`bash
-bin/filebeat-simple-processors.sh
+filebeat/filebeat-simple-processors.sh
 \`\`\`
 
 入力のログデータは次のテキストデータです:
@@ -140,9 +138,9 @@ processors:
 \`\`\`json
 {
   "@timestamp": "2021-02-25T14:05:11.061Z",
-  "@metadata": {},
-  "ecs": {},
-  "host": {},
+  "@metadata": {...},
+  "ecs": {...},
+  "host": {...},
   "log": {
     "file": {
       "path": "/var/log/simple.log"
@@ -151,8 +149,8 @@ processors:
     "offset": 0
   },
   "message": "Message1",
-  "input": {},
-  "agent": {}
+  "input": {...},
+  "agent": {...}
 }
 \`\`\`
 `}</EuiMarkdownFormat>

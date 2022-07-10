@@ -52,7 +52,7 @@ function Dashboard() {
 さらに、作成したダッシュボードは Web ページに埋め込んで共有することもできます。
 
 
-Kibana メインメニューから *Analytics* の *Dashboards* を選択し、 *Create dashboard* をクリックします。
+Kibana メインメニューから *Analytics* の *Dashboard* を選択し、 *Create dashboard* をクリックします。
 
 *Add from library* をクリックして、 \`${process.env.REACT_APP_KEY}-discover\` と \`${process.env.REACT_APP_KEY}-lens\` を追加しましょう
 

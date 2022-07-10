@@ -17,12 +17,11 @@ import ElasticsearchIndex from './elasticsearch/Index.js'
 import KibanaDiscover from './kibana/Discover.js'
 import KibanaLens from './kibana/Lens.js'
 import KibanaDashboard from './kibana/Dashboard.js'
+import KibanaSampleDataSet from './kibana/SampleDataSet.js'
 import FilebeatSimple from './filebeat/Simple.js'
 import FilebeatModule from './filebeat/Module.js'
 import FilebeatDocker from './filebeat/Docker.js'
 import Goal from './Goal.js'
-
-import { css } from '@emotion/react';
 
 import {
   EuiProvider,
@@ -33,11 +32,8 @@ import {
   EuiHeaderSection,
   EuiHeaderSectionItem,
   EuiSideNav,
-  EuiPage,
   EuiTitle,
-  EuiText,
   EuiSelect,
-  EuiButton,
   EuiButtonIcon,
   EuiMarkdownFormat,
   EuiSpacer,
@@ -58,6 +54,7 @@ const contents = [
     {location: '/kibana/discover', title: 'Discover', tag: <KibanaDiscover />},
     {location: '/kibana/lens', title: 'Lens', tag: <KibanaLens />},
     {location: '/kibana/dashboard', title: 'ダッシュボード', tag: <KibanaDashboard />},
+    {location: '/kibana/samples', title: 'サンプルデータセット', tag: <KibanaSampleDataSet />},
   ]},
   {title: 'Beats', contents: [
     {location: '/filebeat/simple', title: 'Filebeat', tag: <FilebeatSimple />},
@@ -82,6 +79,7 @@ function getContent(pathname) {
     case '/goal': {
       return {title: 'おつかれさまでした 🎉'};
     }
+    default: {}
   }
 
   const content = flatContents.find(c => c.location === pathname);
@@ -96,20 +94,6 @@ function Home() {
   </>);
 }
 
-
-function Progressbar() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  return (
-    <div id="progressBar" onClick={() => navigate('/')}>
-      <div id="progressBarDone" style={{
-        width: ((getContentIndex(location.pathname) + 1) * 100 / flatContents.length) + '%'
-      }}>
-      aaa
-      </div>
-    </div>
-  );
-}
 
 function Navi() {
   const location = useLocation();
@@ -231,7 +215,7 @@ function App() {
       <link
           rel="stylesheet"
           type="text/css"
-          href={theme == 'light' ? "/eui_theme_light.css" : "/eui_theme_dark.css"}
+          href={theme === 'light' ? "/eui_theme_light.css" : "/eui_theme_dark.css"}
       />
       <EuiProvider colorMode={theme}>
         <EuiHeader>

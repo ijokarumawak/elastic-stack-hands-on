@@ -4,6 +4,6 @@
 docker run --rm --name es-hands-on-filebeat-simple --user root -it \
   --volume="$(pwd)/filebeat/filebeat-simple-processors.yml:/usr/share/filebeat/filebeat.yml:ro" \
   --volume="$(pwd)/filebeat/simple.log:/var/log/simple.log:ro" \
-  docker.elastic.co/beats/filebeat:7.11.1 \
+  docker.elastic.co/beats/filebeat:8.3.2 \
   -strict.perms=false \
   -e

@@ -8,20 +8,20 @@ function Discover() {
 Elasticsearch に保存されたデータを分析する手法は色々あります。
 その中で最も汎用性が高く、特にデータセットを知る上で最初に触ることが多いのが Discover でしょう。
 
-Kibana メインメニューから *Analytics* の *Discover* を選択します
+Kibana メインメニューから *Analytics* の *Discover* を選択します。
 
-インデックスパターンを作成するように促されるので作成します、 *Create index pattern* をクリックします。
-もしくは別のインデックスパターンがすでに作成済の場合は、メインメニューの *Management* にある *Stack Management* に遷移し、
-*Kibana* の *Index Patterns* から、 *Create index pattern* をクリックします。
+Data view を作成するように促されるので作成します、 *Create data view* をクリックします。
+もしくは別の Data view がすでに作成済の場合は、メインメニューの *Management* にある *Stack Management* に遷移し、
+*Kibana* の *Data Views* から、 *Create data view* をクリックします。
 
-*Index pattern name* を \`es-hands-on-${process.env.REACT_APP_KEY}\`、 *Time field* を \`@timestamp\` とします。
+*Data view name* を \`es-hands-on-${process.env.REACT_APP_KEY}\`、 *Time field* を \`@timestamp\` とします。
 作成したら再び Discover の画面に戻りましょう。
 
-左上のインデックスパターンで、 \`es-hands-on-${process.env.REACT_APP_KEY}\` を選びます。
+左上の Data view プルダウンで、 \`es-hands-on-${process.env.REACT_APP_KEY}\` を選びます。
 
 結果がないので時間範囲を拡げよ、と促されます。デフォルトでは \`Last 15 minutes\` となっています。
 先ほど登録したドキュメントが含まれる範囲を右上のタイムピッカーで指定しましょう。
-例えば \`Last 1 year\` を選択します。
+例えば \`Last 7 days\` を選択します。
 
 時系列グラフに緑のバーが表示されるはずです。表示部分をマウスで囲うとズームできます。
 

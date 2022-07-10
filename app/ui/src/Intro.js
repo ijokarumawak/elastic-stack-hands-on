@@ -32,10 +32,12 @@ Elastic では主な三つのユースケースにすぐに利用可能なソリ
 `}</EuiMarkdownFormat>;
 }
 
-export default () => {
+function Intro(){
   return (
     <div>
       <WhatIsElasticStack />
     </div>
   );
-};
+}
+
+export default Intro;

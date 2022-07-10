@@ -220,10 +220,4 @@ class ElasticsearchPrivileges extends React.Component {
   }
 }
 
-export default () => {
-  return (
-    <div>
-      <Install />
-    </div>
-  );
-}
+export default Install;

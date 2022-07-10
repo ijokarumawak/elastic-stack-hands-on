@@ -22,7 +22,7 @@ Filebeat には Docker コンテナや、 Kubernetes で利用できる Auto Dis
 
 次のコマンドで Filebeat を実行してみましょう:
 \`\`\`bash
-bin/filebeat-docker.sh
+filebeat/filebeat-docker.sh
 \`\`\`
 
 設定のキモになる部分は *filebeat/filebeat-docker.yml* の以下の部分です:
