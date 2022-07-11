@@ -22,6 +22,7 @@ import FilebeatSimple from './filebeat/Simple.js'
 import FilebeatModule from './filebeat/Module.js'
 import FilebeatDocker from './filebeat/Docker.js'
 import PythonQA from './python/QA.js'
+import PythonComboBox from './python/ComboBox.js'
 import Goal from './Goal.js'
 
 import {
@@ -45,10 +46,21 @@ import {
 import { appendIconComponentCache } from '@elastic/eui/es/components/icon/icon';
 
 import { icon as EuiIconApps } from '@elastic/eui/es/components/icon/assets/apps';
-import { icon as EuiIconCopyClipboard } from '@elastic/eui/es/components/icon/assets/copy_clipboard';
 import { icon as EuiIconArrowDown } from '@elastic/eui/es/components/icon/assets/arrow_down';
 import { icon as EuiIconArrowLeft } from '@elastic/eui/es/components/icon/assets/arrow_left';
 import { icon as EuiIconArrowRight } from '@elastic/eui/es/components/icon/assets/arrow_right';
+import { icon as EuiIconCopyClipboard } from '@elastic/eui/es/components/icon/assets/copy_clipboard';
+import { icon as EuiIconCross } from '@elastic/eui/es/components/icon/assets/cross';
+import { icon as EuiIconEditorBold } from '@elastic/eui/es/components/icon/assets/editor_bold';
+import { icon as EuiIconEditorItalic } from '@elastic/eui/es/components/icon/assets/editor_italic';
+import { icon as EuiIconEditorUnorderedList } from '@elastic/eui/es/components/icon/assets/editor_unordered_list';
+import { icon as EuiIconEditorOrderedList } from '@elastic/eui/es/components/icon/assets/editor_ordered_list';
+import { icon as EuiIconEditorChecklist } from '@elastic/eui/es/components/icon/assets/editor_checklist';
+import { icon as EuiIconEditorCodeBlock } from '@elastic/eui/es/components/icon/assets/editor_code_block';
+import { icon as EuiIconEditorComment } from '@elastic/eui/es/components/icon/assets/editor_comment';
+import { icon as EuiIconEditorLink } from '@elastic/eui/es/components/icon/assets/editor_link';
+import { icon as EuiIconEye } from '@elastic/eui/es/components/icon/assets/eye';
+import { icon as EuiIconQuote } from '@elastic/eui/es/components/icon/assets/quote';
 
 appendIconComponentCache({
   apps: EuiIconApps,
@@ -56,6 +68,17 @@ appendIconComponentCache({
   arrowLeft: EuiIconArrowLeft,
   arrowRight: EuiIconArrowRight,
   copyClipboard: EuiIconCopyClipboard,
+  cross: EuiIconCross,
+  editorBold: EuiIconEditorBold,
+  editorItalic: EuiIconEditorItalic,
+  editorUnorderedList: EuiIconEditorUnorderedList,
+  editorOrderedList: EuiIconEditorOrderedList,
+  editorChecklist: EuiIconEditorChecklist,
+  editorCodeBlock: EuiIconEditorCodeBlock,
+  editorComment: EuiIconEditorComment,
+  editorLink: EuiIconEditorLink,
+  eye: EuiIconEye,
+  quote: EuiIconQuote,
 });
 
 const contents = [
@@ -79,7 +102,8 @@ const contents = [
     {location: '/filebeat/docker', title: 'Docker コンテナを自動監視', tag: <FilebeatDocker />}
   ]},
   {title: 'Python', contents: [
-    {location: '/python/qa', title: 'QA', tag: <PythonQA />}
+    {location: '/python/qa', title: 'QA', tag: <PythonQA />},
+    {location: '/python/combo', title: 'ComboBox', tag: <PythonComboBox />}
   ]}
 ];
 

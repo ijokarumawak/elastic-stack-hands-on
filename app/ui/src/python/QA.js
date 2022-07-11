@@ -1,18 +1,51 @@
+import React, {useState} from 'react';
+
 import {
   EuiMarkdownFormat,
   EuiMarkdownEditor,
+  EuiForm,
   EuiFormControlLayout,
   EuiFormLabel,
+  EuiFormRow,
   EuiFieldText,
   EuiSpacer,
   EuiCodeBlock,
   EuiButton,
   EuiSwitch,
+  EuiComboBox,
   EuiFlexGroup,
   EuiFlexItem,
+  EuiPage
 } from '@elastic/eui';
 
+import Multiselect from "react-widgets/Multiselect";
+import "react-widgets/styles.css";
+
+const tagOptionsStatic = [
+  {name: 'Elasticsearch'},
+  {name: 'Kibana'},
+  {name: 'Beats'},
+  {name: 'Elastic Agent'},
+  {name: 'Discover'},
+  {name: 'Lens'},
+  {name: 'Vega'}
+];
+
 function QA() {
+
+  const [tags, setTags] = useState([]);
+  const [tagOptions, setTagOptions] = useState(tagOptionsStatic);
+
+  function handleCreate(name) {
+    let newOption = { name }
+
+    // select new option
+    setTags([...tags, newOption]);
+
+    // add new option to our dataset
+    setTagOptions(data => [newOption, ...data])
+  }
+
   return (
   <>
 <EuiMarkdownFormat>{`
@@ -79,17 +112,27 @@ curl -i -XPOST localhost:8000/qa/questions/ -H 'Content-Type: application/json' 
 
 `}</EuiMarkdownFormat>
 
-<EuiFormControlLayout
-  prepend={<EuiFormLabel htmlFor="qa.title">タイトル</EuiFormLabel>}
->
-  <EuiFieldText
-    type="text"
-    className="euiFieldText--inGroup"
-    controlOnly
-    id="qa.title"
-  />
-</EuiFormControlLayout>
-<EuiMarkdownEditor value="hello" onChange={() => {}} />
+<EuiForm>
+  <EuiFormRow label="タイトル">
+    <EuiFieldText name="qa.title" />
+  </EuiFormRow>
+  <EuiFormRow label="ユーザー">
+    <EuiFieldText name="qa.user" />
+  </EuiFormRow>
+  <EuiFormRow label="タグ">
+    {/* I wanted to use EuiComboBox, but it doesn't show options as expected.. */}
+    <Multiselect
+      data={tagOptions}
+      value={tags}
+      textField="name"
+      allowCreate="onFilter"
+      onCreate={handleCreate}
+      onChange={setTags}
+    />
+  </EuiFormRow>
+  <EuiSpacer />
+  <EuiMarkdownEditor value="hello" onChange={() => {}} />
+</EuiForm>
 </>
   );
 }

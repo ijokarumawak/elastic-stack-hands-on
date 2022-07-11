@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@elastic/datemath": "^5.0.3",
-    "@elastic/eui": "^60.1.1",
+    "@elastic/eui": "^60.2.0",
     "@emotion/react": "^11.9.3",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
@@ -15,6 +15,7 @@
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
+    "react-widgets": "^5.8.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
