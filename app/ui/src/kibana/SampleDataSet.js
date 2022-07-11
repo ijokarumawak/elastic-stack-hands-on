@@ -5,6 +5,8 @@ function SampleDataSet() {
 <EuiMarkdownFormat>{`
 ## サンプルデータを見てみよう
 
+TODO: サンプルデータセットを使ったクイズをいくつか出題
+
 `}</EuiMarkdownFormat>
   );
 }

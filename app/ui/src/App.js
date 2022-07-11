@@ -21,6 +21,7 @@ import KibanaSampleDataSet from './kibana/SampleDataSet.js'
 import FilebeatSimple from './filebeat/Simple.js'
 import FilebeatModule from './filebeat/Module.js'
 import FilebeatDocker from './filebeat/Docker.js'
+import PythonQA from './python/QA.js'
 import Goal from './Goal.js'
 
 import {
@@ -41,6 +42,22 @@ import {
   htmlIdGenerator
 } from '@elastic/eui';
 
+import { appendIconComponentCache } from '@elastic/eui/es/components/icon/icon';
+
+import { icon as EuiIconApps } from '@elastic/eui/es/components/icon/assets/apps';
+import { icon as EuiIconCopyClipboard } from '@elastic/eui/es/components/icon/assets/copy_clipboard';
+import { icon as EuiIconArrowDown } from '@elastic/eui/es/components/icon/assets/arrow_down';
+import { icon as EuiIconArrowLeft } from '@elastic/eui/es/components/icon/assets/arrow_left';
+import { icon as EuiIconArrowRight } from '@elastic/eui/es/components/icon/assets/arrow_right';
+
+appendIconComponentCache({
+  apps: EuiIconApps,
+  arrowDown: EuiIconArrowDown,
+  arrowLeft: EuiIconArrowLeft,
+  arrowRight: EuiIconArrowRight,
+  copyClipboard: EuiIconCopyClipboard,
+});
+
 const contents = [
   {title: 'はじめに', contents: [
     {location: '/intro', title: 'Elastic Stack とは', tag: <Intro />},
@@ -60,6 +77,9 @@ const contents = [
     {location: '/filebeat/simple', title: 'Filebeat', tag: <FilebeatSimple />},
     {location: '/filebeat/module', title: 'Filebeat モジュール', tag: <FilebeatModule />},
     {location: '/filebeat/docker', title: 'Docker コンテナを自動監視', tag: <FilebeatDocker />}
+  ]},
+  {title: 'Python', contents: [
+    {location: '/python/qa', title: 'QA', tag: <PythonQA />}
   ]}
 ];
 
