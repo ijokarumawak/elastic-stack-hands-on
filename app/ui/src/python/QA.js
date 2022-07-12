@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, Fragment} from 'react';
 
 import {
   EuiMarkdownFormat,
@@ -22,8 +22,15 @@ import {
   EuiFlyoutHeader,
   EuiFlyoutBody,
   EuiFlyoutFooter,
-  useGeneratedHtmlId
+  EuiHealth,
+  EuiSearchBar,
+  EuiCallOut,
+  EuiBasicTable,
+  useGeneratedHtmlId,
+  Random
 } from '@elastic/eui';
+
+import QuestionsTable from "./QuestionsTable.js";
 
 import Multiselect from "react-widgets/Multiselect";
 import "react-widgets/styles.css";
@@ -40,6 +47,7 @@ const tagOptionsStatic = [
 
 function QA() {
 
+  const [questions, setQuestions] = useState([]);
 
   return (
   <>
@@ -61,6 +69,7 @@ JSON ドキュメントのデザイン
 - tag
 - タイトル
 - 本文 markdown
+- ステータス (open, closed)
 
 回答:
 - @timestamp
@@ -106,13 +115,18 @@ curl -i -XPOST localhost:8000/qa/questions/ -H 'Content-Type: application/json' 
 [Python Elasticsearch Client](https://elasticsearch-py.readthedocs.io/en/v8.3.2/)
 
 `}</EuiMarkdownFormat>
-<QuestionEditor />
+<QuestionEditor
+  questions={questions}
+  setQuestions={setQuestions}
+  />
+
+<QuestionsTable />
 
 </>
   );
 }
 
-function QuestionEditor() {
+function QuestionEditor(props) {
   const [isFlyoutVisible, setIsFlyoutVisible] = useState(false);
   const showFlyout = () => setIsFlyoutVisible(true);
   const closeFlyout = () => setIsFlyoutVisible(false);
@@ -144,7 +158,8 @@ function QuestionEditor() {
       tags: tags,
       body: body
     };
-    console.log(question);
+    props.setQuestions([...props.questions, question]);
+    closeFlyout();
   }
 
   let flyout;
@@ -211,6 +226,5 @@ function QuestionEditor() {
   </>
   );
 }
-
 
 export default QA;

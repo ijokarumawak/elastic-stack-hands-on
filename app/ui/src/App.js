@@ -60,7 +60,9 @@ import { icon as EuiIconEditorCodeBlock } from '@elastic/eui/es/components/icon/
 import { icon as EuiIconEditorComment } from '@elastic/eui/es/components/icon/assets/editor_comment';
 import { icon as EuiIconEditorLink } from '@elastic/eui/es/components/icon/assets/editor_link';
 import { icon as EuiIconEye } from '@elastic/eui/es/components/icon/assets/eye';
+import { icon as EuiIconFaceSad } from '@elastic/eui/es/components/icon/assets/face_sad';
 import { icon as EuiIconQuote } from '@elastic/eui/es/components/icon/assets/quote';
+import { icon as EuiIconSearch } from '@elastic/eui/es/components/icon/assets/search';
 
 appendIconComponentCache({
   apps: EuiIconApps,
@@ -78,7 +80,9 @@ appendIconComponentCache({
   editorComment: EuiIconEditorComment,
   editorLink: EuiIconEditorLink,
   eye: EuiIconEye,
+  faceSad: EuiIconFaceSad,
   quote: EuiIconQuote,
+  search: EuiIconSearch,
 });
 
 const contents = [
