@@ -1,6 +1,7 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import {
   Random,
+  EuiButton,
   EuiCallOut,
   EuiSpacer,
   EuiFlexGroup,
@@ -9,6 +10,8 @@ import {
   EuiFieldSearch,
   EuiFilterGroup,
   EuiFilterButton,
+  EuiLink,
+  formatDate,
 } from '@elastic/eui';
 import QuestionEditor from "./QuestionEditor.js";
 
@@ -40,7 +43,34 @@ const items = Array(10).fill(0).map((id) => {
 const initialQuery = 'status:open';
 export default (props) => {
 
-  const {questions, setQuestions} = props;
+  console.log('Initializing QA...');
+
+  const [questions, setQuestions] = useState([]);
+
+  const loadQuestions = async() => {
+    console.log('loading questions');
+    fetch('/python/qa/questions')
+      .then(response => {
+        console.log(response);
+        if (!response.ok) {
+            return {
+              status: response.status,
+              statusText: response.statusText
+            }
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+        setQuestions(data.hits.hits);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  useEffect(() => {loadQuestions();}, []);
+
 
   const [query, setQuery] = useState('');
   const [error, setError] = useState(null);
@@ -81,23 +111,44 @@ export default (props) => {
       </Fragment>
     );
   };
+
+  const showQuestion = (record) => {
+    console.log(record.record);
+    setQuestionId(record.record._id);
+    setTitle(record.record._source.title);
+    setBody(record.record._source.body);
+    setUser(record.record._source.user);
+    setTags(record.record._source.tags.map(x => {return {label: x}}));
+    showFlyout();
+  }
+
   const renderTable = () => {
     const columns = [
       {
         name: 'Posted at',
-        field: 'timestamp',
+        field: '_source.timestamp',
+        dataType: 'date',
+        render: (date) => formatDate(date, 'YYYY-MM-DD HH:mm:ss')
       },
       {
         name: 'Status',
-        field: 'status',
+        field: '_source.status',
       },
       {
         name: 'Tags',
-        field: 'tag',
+        field: '_source.tags',
+      },
+      {
+        name: 'Title',
+        render: (record) => (
+          <EuiLink onClick={() => showQuestion({record})}>
+            {record._source.title}
+          </EuiLink>
+        )
       },
       {
         name: 'User',
-        field: 'user',
+        field: '_source.user',
       },
       {
         name: 'Stats',
@@ -105,15 +156,14 @@ export default (props) => {
         render: (item) => {
           return (
             <div>
-              <div>{`${item.comments} Comments`}</div>
+              <div>{`${item._source.comments ? item._source.comments.length : 0} Comments`}</div>
             </div>
           );
         },
       },
     ];
-    // TODO: set API response
-    const queriedItems = items;
-    return <EuiBasicTable items={queriedItems} columns={columns} />;
+
+    return <EuiBasicTable items={questions} columns={columns} />;
   };
   const content = renderError() || (
     <EuiFlexGroup>
@@ -126,14 +176,22 @@ export default (props) => {
       console.log('enter press here! ')
     }
   }
+
+  const [title, setTitle] = useState('');
+  const [user, setUser] = useState(process.env.REACT_APP_KEY);
+  const [tags, setTags] = useState([]);
+  const [body, setBody] = useState('');
+  const [questionId, setQuestionId] = useState('');
+
+  const [isFlyoutVisible, setIsFlyoutVisible] = useState(false);
+  const showFlyout = () => setIsFlyoutVisible(true);
+  const closeFlyout = () => setIsFlyoutVisible(false);
+
   return (
     <Fragment>
       <EuiFlexGroup alignItems="center">
         <EuiFlexItem grow={false}>
-          <QuestionEditor
-            questions={questions}
-            setQuestions={setQuestions}
-            />
+          <EuiButton onClick={showFlyout}>質問する</EuiButton>
         </EuiFlexItem>
         <EuiFlexItem grow={true}>
           <EuiFieldSearch
@@ -165,6 +223,19 @@ export default (props) => {
       </EuiFlexGroup>
       <EuiSpacer size="l" />
       {content}
+      <QuestionEditor
+        loadQuestions={loadQuestions}
+        questionId={questionId}
+        user={user}
+        title={title}
+        setTitle={setTitle}
+        tags={tags}
+        setTags={setTags}
+        body={body}
+        setBody={setBody}
+        isFlyoutVisible={isFlyoutVisible}
+        closeFlyout={closeFlyout}
+        />
     </Fragment>
   );
 };

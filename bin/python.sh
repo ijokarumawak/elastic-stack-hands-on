@@ -1,5 +1,4 @@
 #!/bin/sh
-
 CONTAINER_NAME=es-hands-on-python
 . $(dirname $0)/../env.sh
 
@@ -18,4 +17,5 @@ docker run --rm --name ${CONTAINER_NAME} --network es-hands-on -d \
 -e ELASTIC_CLOUD_ID=${ELASTIC_CLOUD_ID} \
 -e ELASTIC_USERNAME=${ELASTIC_USERNAME} \
 -e ELASTIC_PASSWORD=${ELASTIC_PASSWORD} \
-ijokarumawak/${CONTAINER_NAME} \
+-e HANDS_ON_KEY=${HANDS_ON_KEY} \
+ijokarumawak/${CONTAINER_NAME}

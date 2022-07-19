@@ -2,7 +2,7 @@
 CONTAINER_NAME=es-hands-on-app-api
 . $(dirname $0)/../env.sh
 
-(cd app/api && docker build -t ijokarumawak/es-hands-on-app-api .)
+(cd app/api && docker build -t ijokarumawak/${CONTAINER_NAME} .)
 
 docker ps |grep ${CONTAINER_NAME} > /dev/null 2>&1
 if [ $? -eq 0 ]; then
@@ -17,4 +17,4 @@ docker run --rm --name ${CONTAINER_NAME} --network es-hands-on -d \
 -e ELASTIC_CLOUD_ID=${ELASTIC_CLOUD_ID} \
 -e ELASTIC_USERNAME=${ELASTIC_USERNAME} \
 -e ELASTIC_PASSWORD=${ELASTIC_PASSWORD} \
-ijokarumawak/es-hands-on-app-api
+ijokarumawak/${CONTAINER_NAME}

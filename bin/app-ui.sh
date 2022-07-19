@@ -3,7 +3,7 @@
 CONTAINER_NAME=es-hands-on-app-ui
 . $(dirname $0)/../env.sh
 
-(cd app/ui && docker build -t ijokarumawak/es-hands-on-app-ui .)
+(cd app/ui && docker build -t ijokarumawak/${CONTAINER_NAME} .)
 
 docker ps |grep ${CONTAINER_NAME} > /dev/null 2>&1
 if [ $? -eq 0 ]; then
@@ -16,4 +16,4 @@ docker run --rm --name ${CONTAINER_NAME} --network es-hands-on -d \
 --label co.elastic.logs/processors.1.add_fields.target="event" \
 --label co.elastic.logs/processors.1.add_fields.fields.dataset='${data.container.name}' \
 -e REACT_APP_KEY="${HANDS_ON_KEY}" \
-ijokarumawak/es-hands-on-app-ui \
+ijokarumawak/${CONTAINER_NAME} \

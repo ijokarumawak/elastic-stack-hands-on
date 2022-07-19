@@ -30,16 +30,10 @@ const tagOptionsStatic = [
 ];
 
 function QuestionEditor(props) {
-  const {questions, setQuestions} = props;
-  const [isFlyoutVisible, setIsFlyoutVisible] = useState(false);
-  const showFlyout = () => setIsFlyoutVisible(true);
-  const closeFlyout = () => setIsFlyoutVisible(false);
+  const {questionId, user, title, setTitle, tags, setTags, body, setBody, loadQuestions,
+        isFlyoutVisible, closeFlyout} = props;
 
-  const [title, setTitle] = useState('');
-  const [user, setUser] = useState(process.env.REACT_APP_KEY);
-  const [tags, setTags] = useState([]);
   const [tagOptions, setTagOptions] = useState(tagOptionsStatic);
-  const [body, setBody] = useState('');
 
   const createQuestionFlyoutId = useGeneratedHtmlId({
     prefix: 'createQuestionFlyout',
@@ -55,16 +49,55 @@ function QuestionEditor(props) {
     setTagOptions(data => [newOption, ...data])
   }
 
+  function post(question) {
+    return fetch('/python/qa/questions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(question)
+    });
+  }
+
+  function put(questionId, question) {
+    return fetch('/python/qa/questions/' + questionId, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(question)
+    });
+  }
+
   function save() {
     const question = {
       title: title,
       user: user,
-      tags: tags,
-      body: body
+      tags: tags.map(x => x.label),
+      body: body,
+      timestamp: new Date()
     };
     console.log(question);
-    setQuestions([...questions, question]);
-    closeFlyout();
+
+    (questionId ? put(questionId, question) : post(question))
+      .then(response => {
+        console.log(response);
+        if (!response.ok) {
+            return {
+              status: response.status,
+              statusText: response.statusText
+            }
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+        loadQuestions();
+        closeFlyout();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   let flyout;
@@ -85,7 +118,7 @@ function QuestionEditor(props) {
         <EuiFieldText name="qa.title" value={title} onChange={(e) => setTitle(e.target.value)} />
       </EuiFormRow>
       <EuiFormRow label="ユーザー">
-        <EuiFieldText name="qa.user" value={user} onChange={(e) => setUser(e.target.value)} />
+        <EuiFieldText name="qa.user" value={user} disabled={true} />
       </EuiFormRow>
       <EuiFormRow label="タグ">
         <EuiComboBox
@@ -127,7 +160,6 @@ function QuestionEditor(props) {
 
   return (
   <>
-<EuiButton onClick={showFlyout}>質問する</EuiButton>
 {flyout}
   </>
   );

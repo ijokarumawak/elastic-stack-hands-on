@@ -12,7 +12,7 @@ app = FastAPI()
 es = Elasticsearch(cloud_id=os.getenv("ELASTIC_CLOUD_ID"),
                    basic_auth=[os.getenv("ELASTIC_USERNAME"), os.getenv("ELASTIC_PASSWORD")])
 
-qa_index = "es-hands-on-qa-" + os.getenv("HANDS_ON_KEY")
+qa_index = "es-hands-on-qa"
 
 @app.get("/")
 def read_root():
@@ -32,7 +32,26 @@ class Question(BaseModel):
     body: str
 
 
-@app.post("/qa/questions/")
+@app.post("/qa/questions")
 def add_question(question: Question):
-    resp = es.index(index=qa_index, document=jsonable_encoder(question))
+    resp = es.index(index=qa_index, refresh="wait_for", document=jsonable_encoder(question))
     return resp
+
+
+@app.put("/qa/questions/{id}")
+def add_question(id, question: Question):
+    resp = es.index(index=qa_index, id=id, refresh="wait_for", document=jsonable_encoder(question))
+    return resp
+
+
+@app.get("/qa/questions/{id}")
+def get_question(id):
+    resp = es.get(index=qa_index, id=id)
+    return resp
+
+
+@app.get("/qa/questions")
+def search_questions():
+    resp = es.search(index=qa_index, sort=[{"timestamp": {"order": "desc"}}])
+    return resp
+
