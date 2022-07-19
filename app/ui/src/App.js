@@ -22,7 +22,6 @@ import FilebeatSimple from './filebeat/Simple.js'
 import FilebeatModule from './filebeat/Module.js'
 import FilebeatDocker from './filebeat/Docker.js'
 import PythonQA from './python/QA.js'
-import PythonComboBox from './python/ComboBox.js'
 import Goal from './Goal.js'
 
 import {
@@ -106,8 +105,7 @@ const contents = [
     {location: '/filebeat/docker', title: 'Docker コンテナを自動監視', tag: <FilebeatDocker />}
   ]},
   {title: 'Python', contents: [
-    {location: '/python/qa', title: 'QA', tag: <PythonQA />},
-    {location: '/python/combo', title: 'ComboBox', tag: <PythonComboBox />}
+    {location: '/python/qa', title: 'QA', tag: <PythonQA />}
   ]}
 ];
 

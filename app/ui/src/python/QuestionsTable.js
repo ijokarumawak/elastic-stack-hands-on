@@ -1,19 +1,17 @@
 import React, { useState, Fragment } from 'react';
 import {
   Random,
-  EuiHealth,
   EuiCallOut,
   EuiSpacer,
   EuiFlexGroup,
   EuiFlexItem,
-  EuiSwitch,
   EuiBasicTable,
-  EuiSearchBar,
-  EuiButton,
   EuiFieldSearch,
   EuiFilterGroup,
   EuiFilterButton,
 } from '@elastic/eui';
+import QuestionEditor from "./QuestionEditor.js";
+
 const random = new Random();
 const tags = [
   { name: 'marketing', color: 'danger' },
@@ -22,7 +20,6 @@ const tags = [
   { name: 'sales', color: 'warning' },
   { name: 'ga', color: 'success' },
 ];
-const types = ['dashboard', 'visualization', 'watch'];
 const users = [process.env.REACT_APP_KEY, 'gabic'];
 const items = Array(10).fill(0).map((id) => {
   return {
@@ -41,7 +38,10 @@ const items = Array(10).fill(0).map((id) => {
 });
 
 const initialQuery = 'status:open';
-export default () => {
+export default (props) => {
+
+  const {questions, setQuestions} = props;
+
   const [query, setQuery] = useState('');
   const [error, setError] = useState(null);
   const onChange = (e) => {
@@ -129,6 +129,12 @@ export default () => {
   return (
     <Fragment>
       <EuiFlexGroup alignItems="center">
+        <EuiFlexItem grow={false}>
+          <QuestionEditor
+            questions={questions}
+            setQuestions={setQuestions}
+            />
+        </EuiFlexItem>
         <EuiFlexItem grow={true}>
           <EuiFieldSearch
             placeholder="質問を検索"
