@@ -202,6 +202,7 @@ export default (props) => {
       <QuestionEditor
         loadQuestions={loadQuestions}
         questionId={questionId}
+        setQuestionId={setQuestionId}
         user={user}
         title={title}
         setTitle={setTitle}

@@ -34,7 +34,7 @@ const tagOptionsStatic = [
 ];
 
 function QuestionEditor(props) {
-  const {questionId, user, title, setTitle, tags, setTags, body, setBody,
+  const {questionId, setQuestionId, user, title, setTitle, tags, setTags, body, setBody,
         comments, setComments, loadQuestions,
         isFlyoutVisible, closeFlyout} = props;
 
@@ -75,6 +75,16 @@ function QuestionEditor(props) {
     });
   }
 
+  function close() {
+    setQuestionId('');
+    setTitle('');
+    setTags([]);
+    setComment('');
+    setComments([]);
+    setBody('');
+    closeFlyout();
+  }
+
   function save() {
     const question = {
       title: title,
@@ -109,9 +119,8 @@ function QuestionEditor(props) {
       })
       .then(data => {
         console.log(data);
-        setComment('');
         loadQuestions();
-        closeFlyout();
+        close();
       })
       .catch((error) => {
         console.log(error);
@@ -123,7 +132,7 @@ function QuestionEditor(props) {
     flyout = (
 <EuiFlyout
   ownFocus
-  onClose={closeFlyout}
+  onClose={close}
   hideCloseButton
   aria-labelledby={createQuestionFlyoutId}
 >
@@ -175,7 +184,7 @@ function QuestionEditor(props) {
       <EuiFlexItem grow={false}>
         <EuiButtonEmpty
           iconType="cross"
-          onClick={closeFlyout}
+          onClick={close}
           flush="left"
         >
           Close
