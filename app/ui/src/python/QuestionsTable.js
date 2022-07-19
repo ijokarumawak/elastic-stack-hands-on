@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import {
-  Random,
   EuiButton,
   EuiCallOut,
   EuiSpacer,
@@ -14,31 +13,6 @@ import {
   formatDate,
 } from '@elastic/eui';
 import QuestionEditor from "./QuestionEditor.js";
-
-const random = new Random();
-const tags = [
-  { name: 'marketing', color: 'danger' },
-  { name: 'finance', color: 'success' },
-  { name: 'eng', color: 'success' },
-  { name: 'sales', color: 'warning' },
-  { name: 'ga', color: 'success' },
-];
-const users = [process.env.REACT_APP_KEY, 'gabic'];
-const items = Array(10).fill(0).map((id) => {
-  return {
-    id,
-    status: random.oneOf(['open', 'closed']),
-    tag: random.setOf(
-      tags.map((tag) => tag.name),
-      { min: 0, max: 3 }
-    ),
-    active: random.boolean(),
-    user: random.oneOf(users),
-    followers: random.integer({ min: 0, max: 20 }),
-    comments: random.integer({ min: 0, max: 10 }),
-    stars: random.integer({ min: 0, max: 5 }),
-  };
-});
 
 const initialQuery = 'status:open';
 export default (props) => {
@@ -119,6 +93,7 @@ export default (props) => {
     setBody(record.record._source.body);
     setUser(record.record._source.user);
     setTags(record.record._source.tags.map(x => {return {label: x}}));
+    setComments(record.record._source.comments);
     showFlyout();
   }
 
@@ -151,12 +126,12 @@ export default (props) => {
         field: '_source.user',
       },
       {
-        name: 'Stats',
+        name: 'Comments',
         width: '150px',
         render: (item) => {
           return (
             <div>
-              <div>{`${item._source.comments ? item._source.comments.length : 0} Comments`}</div>
+              <div>{`${item._source.comments ? item._source.comments.length : 0}`}</div>
             </div>
           );
         },
@@ -182,6 +157,7 @@ export default (props) => {
   const [tags, setTags] = useState([]);
   const [body, setBody] = useState('');
   const [questionId, setQuestionId] = useState('');
+  const [comments, setComments] = useState([]);
 
   const [isFlyoutVisible, setIsFlyoutVisible] = useState(false);
   const showFlyout = () => setIsFlyoutVisible(true);
@@ -233,6 +209,8 @@ export default (props) => {
         setTags={setTags}
         body={body}
         setBody={setBody}
+        comments={comments}
+        setComments={setComments}
         isFlyoutVisible={isFlyoutVisible}
         closeFlyout={closeFlyout}
         />

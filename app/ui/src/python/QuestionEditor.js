@@ -1,11 +1,14 @@
 import React, {useState, Fragment} from 'react';
 
 import {
+  EuiMarkdownFormat,
   EuiMarkdownEditor,
+  EuiCommentList,
   EuiForm,
   EuiFormRow,
   EuiFieldText,
   EuiSpacer,
+  EuiBasicTable,
   EuiButton,
   EuiButtonEmpty,
   EuiComboBox,
@@ -17,6 +20,7 @@ import {
   EuiFlyoutBody,
   EuiFlyoutFooter,
   useGeneratedHtmlId,
+  formatDate
 } from '@elastic/eui';
 
 const tagOptionsStatic = [
@@ -30,10 +34,12 @@ const tagOptionsStatic = [
 ];
 
 function QuestionEditor(props) {
-  const {questionId, user, title, setTitle, tags, setTags, body, setBody, loadQuestions,
+  const {questionId, user, title, setTitle, tags, setTags, body, setBody,
+        comments, setComments, loadQuestions,
         isFlyoutVisible, closeFlyout} = props;
 
   const [tagOptions, setTagOptions] = useState(tagOptionsStatic);
+  const [comment, setComment] = useState('');
 
   const createQuestionFlyoutId = useGeneratedHtmlId({
     prefix: 'createQuestionFlyout',
@@ -75,9 +81,20 @@ function QuestionEditor(props) {
       user: user,
       tags: tags.map(x => x.label),
       body: body,
-      timestamp: new Date()
+      timestamp: new Date(),
+      comments: comments
     };
-    console.log(question);
+
+    if (comment) {
+      const newComment = {timestamp: new Date(), user: process.env.REACT_APP_KEY, comment: comment};
+      if (question.comments) {
+        question.comments = [...question.comments, newComment]
+      } else {
+        question.comments = [newComment]
+      }
+    }
+
+    console.log('question', JSON.stringify(question));
 
     (questionId ? put(questionId, question) : post(question))
       .then(response => {
@@ -92,6 +109,7 @@ function QuestionEditor(props) {
       })
       .then(data => {
         console.log(data);
+        setComment('');
         loadQuestions();
         closeFlyout();
       })
@@ -110,9 +128,10 @@ function QuestionEditor(props) {
   aria-labelledby={createQuestionFlyoutId}
 >
   <EuiFlyoutHeader>
-    <EuiTitle size="m"><h2>質問しよう</h2></EuiTitle>
   </EuiFlyoutHeader>
   <EuiFlyoutBody>
+    <EuiTitle size="m"><h2>質問</h2></EuiTitle>
+    <EuiSpacer />
     <EuiForm>
       <EuiFormRow label="タイトル">
         <EuiFieldText name="qa.title" value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -132,9 +151,24 @@ function QuestionEditor(props) {
           data-test-subj="tagsComboBox"
         />
       </EuiFormRow>
-      <EuiSpacer />
-      <EuiMarkdownEditor value={body} onChange={setBody} />
     </EuiForm>
+    <EuiSpacer />
+    <EuiMarkdownEditor value={body} onChange={setBody} />
+
+    <EuiSpacer />
+
+    <EuiCommentList comments={comments.map(x => {return {
+          username: x.user,
+          event: 'added a comment',
+          timestamp: 'at ' + formatDate(x.timestamp, 'YYYY-MM-DD HH:mm:ss'),
+          children: (<EuiMarkdownFormat>{x.comment}</EuiMarkdownFormat>)
+        }})} />
+
+    <EuiSpacer />
+    <EuiTitle size="m"><h2>回答</h2></EuiTitle>
+    <EuiSpacer />
+
+    <EuiMarkdownEditor value={comment} onChange={setComment} />
   </EuiFlyoutBody>
   <EuiFlyoutFooter>
     <EuiFlexGroup justifyContent="spaceBetween">

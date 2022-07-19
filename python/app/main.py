@@ -1,5 +1,5 @@
 import os
-from typing import Union
+from typing import List, Union
 from datetime import datetime
 
 from fastapi import FastAPI
@@ -24,12 +24,19 @@ def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
 
+class Comment(BaseModel):
+    timestamp: datetime
+    user: str
+    comment: str
+
+
 class Question(BaseModel):
     timestamp: datetime
     user: str
     tags: list = []
     title: str
     body: str
+    comments: list[Comment] = []
 
 
 @app.post("/qa/questions")
