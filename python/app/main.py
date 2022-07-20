@@ -28,6 +28,7 @@ class Comment(BaseModel):
     timestamp: datetime
     user: str
     comment: str
+    is_answer: Union[bool, None] = False
 
 
 class Question(BaseModel):
@@ -37,6 +38,7 @@ class Question(BaseModel):
     title: str
     body: str
     comments: list[Comment] = []
+    status: str = "open"
 
 
 @app.post("/qa/questions")

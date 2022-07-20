@@ -21,6 +21,7 @@ import KibanaSampleDataSet from './kibana/SampleDataSet.js'
 import FilebeatSimple from './filebeat/Simple.js'
 import FilebeatModule from './filebeat/Module.js'
 import FilebeatDocker from './filebeat/Docker.js'
+import PythonQARequirements from './python/QARequirements.js'
 import PythonQA from './python/QA.js'
 import Goal from './Goal.js'
 
@@ -62,6 +63,8 @@ import { icon as EuiIconEye } from '@elastic/eui/es/components/icon/assets/eye';
 import { icon as EuiIconFaceSad } from '@elastic/eui/es/components/icon/assets/face_sad';
 import { icon as EuiIconQuote } from '@elastic/eui/es/components/icon/assets/quote';
 import { icon as EuiIconSearch } from '@elastic/eui/es/components/icon/assets/search';
+import { icon as EuiIconStarEmpty } from '@elastic/eui/es/components/icon/assets/star_empty';
+import { icon as EuiIconStarFilledSpace } from '@elastic/eui/es/components/icon/assets/star_filled_space';
 
 appendIconComponentCache({
   apps: EuiIconApps,
@@ -82,6 +85,8 @@ appendIconComponentCache({
   faceSad: EuiIconFaceSad,
   quote: EuiIconQuote,
   search: EuiIconSearch,
+  starEmpty: EuiIconStarEmpty,
+  starFilled: EuiIconStarFilledSpace,
 });
 
 const contents = [
@@ -105,7 +110,8 @@ const contents = [
     {location: '/filebeat/docker', title: 'Docker コンテナを自動監視', tag: <FilebeatDocker />}
   ]},
   {title: 'Python', contents: [
-    {location: '/python/qa', title: 'QA', tag: <PythonQA />}
+    {location: '/python/qa_requirements', title: 'QA アプリ要件', tag: <PythonQARequirements />},
+    {location: '/python/qa', title: 'QA アプリ', tag: <PythonQA />}
   ]}
 ];
 

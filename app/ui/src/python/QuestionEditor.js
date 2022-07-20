@@ -11,6 +11,7 @@ import {
   EuiBasicTable,
   EuiButton,
   EuiButtonEmpty,
+  EuiButtonIcon,
   EuiComboBox,
   EuiFlexGroup,
   EuiFlexItem,
@@ -35,7 +36,7 @@ const tagOptionsStatic = [
 
 function QuestionEditor(props) {
   const {questionId, setQuestionId, user, title, setTitle, tags, setTags, body, setBody,
-        comments, setComments, loadQuestions,
+        comments, setComments, timestamp, setTimestamp, loadQuestions,
         isFlyoutVisible, closeFlyout} = props;
 
   const [tagOptions, setTagOptions] = useState(tagOptionsStatic);
@@ -82,6 +83,7 @@ function QuestionEditor(props) {
     setComment('');
     setComments([]);
     setBody('');
+    setTimestamp('');
     closeFlyout();
   }
 
@@ -91,8 +93,9 @@ function QuestionEditor(props) {
       user: user,
       tags: tags.map(x => x.label),
       body: body,
-      timestamp: new Date(),
-      comments: comments
+      timestamp: timestamp ? timestamp : new Date(),
+      comments: comments,
+      status: comments.find(x => x.is_answer) ? 'closed' : 'open'
     };
 
     if (comment) {
@@ -125,6 +128,13 @@ function QuestionEditor(props) {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  function handleOnclickComment(x) {
+    for (let i = 0; i < comments.length; i++) {
+      comments[i].is_answer = !comments[i].is_answer && comments[i] === x;
+    }
+    setComments([...comments]);
   }
 
   let flyout;
@@ -170,6 +180,12 @@ function QuestionEditor(props) {
           username: x.user,
           event: 'added a comment',
           timestamp: 'at ' + formatDate(x.timestamp, 'YYYY-MM-DD HH:mm:ss'),
+          actions: (<EuiButtonIcon
+                      title="回答として採用"
+                      aria-label="回答として採用"
+                      iconType={x.is_answer ? "starFilledSpace" : "starEmpty"}
+                      onClick={() => handleOnclickComment(x)}
+                    />),
           children: (<EuiMarkdownFormat>{x.comment}</EuiMarkdownFormat>)
         }})} />
 

@@ -94,6 +94,7 @@ export default (props) => {
     setUser(record.record._source.user);
     setTags(record.record._source.tags.map(x => {return {label: x}}));
     setComments(record.record._source.comments);
+    setTimestamp(record.record._source.timestamp);
     showFlyout();
   }
 
@@ -103,14 +104,17 @@ export default (props) => {
         name: 'Posted at',
         field: '_source.timestamp',
         dataType: 'date',
+        width: '170px',
         render: (date) => formatDate(date, 'YYYY-MM-DD HH:mm:ss')
       },
       {
         name: 'Status',
+        width: '80px',
         field: '_source.status',
       },
       {
         name: 'Tags',
+        width: '120px',
         field: '_source.tags',
       },
       {
@@ -123,11 +127,13 @@ export default (props) => {
       },
       {
         name: 'User',
+        width: '150px',
         field: '_source.user',
       },
       {
         name: 'Comments',
-        width: '150px',
+        width: '80px',
+        align: 'right',
         render: (item) => {
           return (
             <div>
@@ -142,7 +148,7 @@ export default (props) => {
   };
   const content = renderError() || (
     <EuiFlexGroup>
-      <EuiFlexItem grow={6}>{renderTable()}</EuiFlexItem>
+      <EuiFlexItem>{renderTable()}</EuiFlexItem>
     </EuiFlexGroup>
   );
   const handleSearchKeyPress = (e) => {
@@ -158,6 +164,7 @@ export default (props) => {
   const [body, setBody] = useState('');
   const [questionId, setQuestionId] = useState('');
   const [comments, setComments] = useState([]);
+  const [timestamp, setTimestamp] = useState();
 
   const [isFlyoutVisible, setIsFlyoutVisible] = useState(false);
   const showFlyout = () => setIsFlyoutVisible(true);
@@ -212,6 +219,8 @@ export default (props) => {
         setBody={setBody}
         comments={comments}
         setComments={setComments}
+        timestamp={timestamp}
+        setTimestamp={setTimestamp}
         isFlyoutVisible={isFlyoutVisible}
         closeFlyout={closeFlyout}
         />
