@@ -6,6 +6,7 @@ import {
   EuiFlexGroup,
   EuiFlexItem,
   EuiBasicTable,
+  EuiButtonIcon,
   EuiFieldSearch,
   EuiFilterGroup,
   EuiFilterButton,
@@ -175,6 +176,10 @@ export default (props) => {
       <EuiFlexGroup alignItems="center">
         <EuiFlexItem grow={false}>
           <EuiButton onClick={showFlyout}>質問する</EuiButton>
+        </EuiFlexItem>
+        <EuiFlexItem grow={false}>
+          <EuiButtonIcon onClick={loadQuestions} iconType="refresh"
+            title="更新" aria-label="更新" />
         </EuiFlexItem>
         <EuiFlexItem grow={true}>
           <EuiFieldSearch
