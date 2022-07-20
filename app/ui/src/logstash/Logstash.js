@@ -68,10 +68,12 @@ cp logstash/simple.conf logstash/0003410379.conf
 
 コピーした \`logstash/0003410379.conf\` ファイルを編集していきます。
 
-1. まずはファイルを読み込む、 input の設定で
-2. csv filter で項目を分割
-3. 不要なフィールドは prune
-4. Elasticsearch への出力設定
+1. input の設定でファイルを読み込む
+1. csv filter で項目を分割
+1. 不要なレコードは削除
+1. データ型変換
+1. 不要なフィールドは prune
+1. Elasticsearch への出力設定
 
 中には value が "-" になっている厄介なレコードもあります。このようなレコードは削除してしまうのがよいでしょう。
 
@@ -91,6 +93,11 @@ $ grep ',"-"' logstash/0003410379.csv |wc -l
 \`\`\`
 GET es-hands-on-00003410379-${process.env.REACT_APP_KEY}/_count
 \`\`\`
+
+## Challenge!
+
+- 取り込んだ 0003410379 を Kibana で分析してみましょう
+- 0003410382.csv も取り込んでみましょう
 
 `}</EuiMarkdownFormat>
 
