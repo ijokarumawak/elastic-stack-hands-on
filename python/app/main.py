@@ -41,6 +41,13 @@ class Question(BaseModel):
     status: str = "open"
 
 
+class SearchOptions(BaseModel):
+    query: Union[str, None] = None
+    tags: list = []
+    status: Union[str, None] = None
+    user: Union[str, None] = None
+
+
 @app.post("/qa/questions")
 def add_question(question: Question):
     resp = es.index(index=qa_index, refresh="wait_for", document=jsonable_encoder(question))
@@ -60,7 +67,42 @@ def get_question(id):
 
 
 @app.get("/qa/questions")
-def search_questions():
-    resp = es.search(index=qa_index, sort=[{"timestamp": {"order": "desc"}}])
+def get_questions(options: Union[SearchOptions, None] = None):
+    return search_questions(options)
+
+
+@app.post("/qa/questions/_search")
+def get_questions(options: SearchOptions):
+    return search_questions(options)
+
+
+def search_questions(options: Union[SearchOptions, None] = None):
+    must = []
+    filter = []
+    if options:
+        if options.query:
+            must.append({"multi_match": {
+                "fields": [
+                    "title",
+                    "body",
+                    "user",
+                    "comments.comment",
+                    "comments.user"
+                ],
+                "query": options.query
+            }})
+
+        if options.user:
+            filter.append({"match": {
+                "user": options.user
+            }})
+
+        if options.status:
+            filter.append({"match": {
+                "status": options.status
+            }})
+
+    resp = es.search(index=qa_index, sort=[{"timestamp": {"order": "desc"}}],
+                     query={"bool": {"must": must, "filter": filter}})
     return resp
 

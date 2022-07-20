@@ -90,10 +90,21 @@ curl -i -XPOST localhost:8000/qa/questions/ -H 'Content-Type: application/json' 
 curl -i -XGET localhost:8000/qa/questions/2KdaFIIBOaP8JqATcdFM -H 'Content-Type: application/json'
 \`\`\`
 
-質問を検索
+質問を全件取得
 \`\`\`bash
 curl -i -XGET localhost:8000/qa/questions -H 'Content-Type: application/json'
 \`\`\`
+
+質問を検索
+\`\`\`bash
+curl -i -XGET localhost:8000/qa/questions -H 'Content-Type: application/json' -d '{"query": "タイムスタンプ"}'
+\`\`\`
+
+質問を検索 (POST)
+\`\`\`bash
+curl -i -XPOST localhost:8000/qa/questions/_search -H 'Content-Type: application/json' -d '{"query": "タイムスタンプ"}'
+\`\`\`
+
 
 [Python Elasticsearch Client](https://elasticsearch-py.readthedocs.io/en/v8.3.2/)
 

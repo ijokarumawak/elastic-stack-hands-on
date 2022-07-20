@@ -15,16 +15,38 @@ import {
 } from '@elastic/eui';
 import QuestionEditor from "./QuestionEditor.js";
 
-const initialQuery = 'status:open';
 export default (props) => {
 
   console.log('Initializing QA...');
+
+  const [query, setQuery] = useState('');
+  const [error, setError] = useState(null);
+  const onChange = (e) => {
+    setQuery(e.target.value);
+  };
+
+  const [isMineFilterOn, setIsMineFilterOn] = useState(false);
+  const [isOpenFilterOn, setIsOpenFilterOn] = useState(false);
+  const [isClosedFilterOn, setIsClosedFilterOn] = useState(false);
+  let _isMineFilterOn = isMineFilterOn;
+  let _isOpenFilterOn = isOpenFilterOn;
+  let _isClosedFilterOn = isClosedFilterOn;
 
   const [questions, setQuestions] = useState([]);
 
   const loadQuestions = async() => {
     console.log('loading questions');
-    fetch('/python/qa/questions')
+    fetch('/python/qa/questions/_search', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        query: query,
+        user: _isMineFilterOn ? process.env.REACT_APP_KEY : null,
+        status: _isOpenFilterOn ? 'open' : (_isClosedFilterOn ? 'closed' : null)
+      })
+    })
       .then(response => {
         console.log(response);
         if (!response.ok) {
@@ -47,28 +69,26 @@ export default (props) => {
   useEffect(() => {loadQuestions();}, []);
 
 
-  const [query, setQuery] = useState('');
-  const [error, setError] = useState(null);
-  const onChange = (e) => {
-    setQuery(e.target.value);
-  };
-
-  const [isMineFilterOn, setIsMineFilterOn] = useState(false);
-  const [isOpenFilterOn, setIsOpenFilterOn] = useState(false);
-  const [isClosedFilterOn, setIsClosedFilterOn] = useState(false);
-
   const toggleMineFilter = () => {
-    setIsMineFilterOn(!isMineFilterOn);
+    _isMineFilterOn = !isMineFilterOn;
+    setIsMineFilterOn(_isMineFilterOn);
+    loadQuestions();
   };
 
   const toggleOpenFilter = () => {
-    setIsOpenFilterOn(!isOpenFilterOn);
-    setIsClosedFilterOn(isClosedFilterOn && !isOpenFilterOn ? false : isClosedFilterOn);
+    _isOpenFilterOn = !isOpenFilterOn;
+    _isClosedFilterOn = isClosedFilterOn && !isOpenFilterOn ? false : isClosedFilterOn;
+    setIsOpenFilterOn(_isOpenFilterOn);
+    setIsClosedFilterOn(_isClosedFilterOn);
+    loadQuestions();
   };
 
   const toggleClosedFilter = () => {
-    setIsClosedFilterOn(!isClosedFilterOn);
-    setIsOpenFilterOn(isOpenFilterOn && !isClosedFilterOn ? false : isOpenFilterOn);
+    _isClosedFilterOn = !isClosedFilterOn;
+    _isOpenFilterOn = isOpenFilterOn && !isClosedFilterOn ? false : isOpenFilterOn;
+    setIsClosedFilterOn(_isClosedFilterOn);
+    setIsOpenFilterOn(_isOpenFilterOn);
+    loadQuestions();
   };
 
   const renderError = () => {
@@ -86,6 +106,17 @@ export default (props) => {
       </Fragment>
     );
   };
+
+  const newQuestion = () => {
+    setQuestionId('');
+    setTitle('');
+    setBody('');
+    setUser(process.env.REACT_APP_KEY);
+    setTags([]);
+    setComments([]);
+    setTimestamp(null);
+    showFlyout();
+  }
 
   const showQuestion = (record) => {
     console.log(record.record);
@@ -154,8 +185,7 @@ export default (props) => {
   );
   const handleSearchKeyPress = (e) => {
     if(e.key === 'Enter'){
-      // TODO: call Python API
-      console.log('enter press here! ')
+      loadQuestions();
     }
   }
 
@@ -175,7 +205,7 @@ export default (props) => {
     <Fragment>
       <EuiFlexGroup alignItems="center">
         <EuiFlexItem grow={false}>
-          <EuiButton onClick={showFlyout}>質問する</EuiButton>
+          <EuiButton onClick={newQuestion}>質問する</EuiButton>
         </EuiFlexItem>
         <EuiFlexItem grow={false}>
           <EuiButtonIcon onClick={loadQuestions} iconType="refresh"

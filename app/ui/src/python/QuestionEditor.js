@@ -4,6 +4,7 @@ import {
   EuiMarkdownFormat,
   EuiMarkdownEditor,
   EuiCommentList,
+  EuiBadge,
   EuiForm,
   EuiFormRow,
   EuiFieldText,
@@ -12,10 +13,12 @@ import {
   EuiButton,
   EuiButtonEmpty,
   EuiButtonIcon,
+  EuiIcon,
   EuiComboBox,
   EuiFlexGroup,
   EuiFlexItem,
   EuiTitle,
+  EuiText,
   EuiFlyout,
   EuiFlyoutHeader,
   EuiFlyoutBody,
@@ -137,8 +140,57 @@ function QuestionEditor(props) {
     setComments([...comments]);
   }
 
+  const canEdit = user === process.env.REACT_APP_KEY;
   let flyout;
   if (isFlyoutVisible) {
+
+    let questionForm;
+    let commentAction;
+    if (canEdit) {
+      questionForm = (
+        <EuiForm>
+          <EuiFormRow>
+            <EuiText>by {user}</EuiText>
+          </EuiFormRow>
+          <EuiFormRow label="タイトル">
+            <EuiFieldText name="qa.title" value={title} onChange={(e) => setTitle(e.target.value)} disabled={!canEdit} />
+          </EuiFormRow>
+          <EuiFormRow label="タグ">
+            <EuiComboBox
+              aria-label="Tags combo box"
+              placeholder="Select or create options"
+              options={tagOptions}
+              selectedOptions={tags}
+              onChange={setTags}
+              onCreateOption={handleCreateTag}
+              isClearable={true}
+              data-test-subj="tagsComboBox"
+            />
+          </EuiFormRow>
+          <EuiSpacer />
+          <EuiMarkdownEditor value={body} onChange={setBody} />
+        </EuiForm>
+      )
+    } else {
+      questionForm = (
+        <>
+          <EuiTitle><h1>{title}</h1></EuiTitle>
+          <EuiText>by {user}</EuiText>
+          <EuiSpacer />
+          <EuiFlexGroup>
+            {tags.map((tag) => (
+              <EuiFlexItem grow={false}>
+                <EuiBadge color="default">{tag.label}</EuiBadge>
+              </EuiFlexItem>
+            ))}
+          </EuiFlexGroup>
+          <EuiSpacer />
+          <EuiMarkdownFormat>{body}</EuiMarkdownFormat>
+        </>
+      )
+    }
+
+
     flyout = (
 <EuiFlyout
   ownFocus
@@ -151,28 +203,7 @@ function QuestionEditor(props) {
   <EuiFlyoutBody>
     <EuiTitle size="m"><h2>質問</h2></EuiTitle>
     <EuiSpacer />
-    <EuiForm>
-      <EuiFormRow label="タイトル">
-        <EuiFieldText name="qa.title" value={title} onChange={(e) => setTitle(e.target.value)} />
-      </EuiFormRow>
-      <EuiFormRow label="ユーザー">
-        <EuiFieldText name="qa.user" value={user} disabled={true} />
-      </EuiFormRow>
-      <EuiFormRow label="タグ">
-        <EuiComboBox
-          aria-label="Tags combo box"
-          placeholder="Select or create options"
-          options={tagOptions}
-          selectedOptions={tags}
-          onChange={setTags}
-          onCreateOption={handleCreateTag}
-          isClearable={true}
-          data-test-subj="tagsComboBox"
-        />
-      </EuiFormRow>
-    </EuiForm>
-    <EuiSpacer />
-    <EuiMarkdownEditor value={body} onChange={setBody} />
+    {questionForm}
 
     <EuiSpacer />
 
@@ -185,6 +216,7 @@ function QuestionEditor(props) {
                       aria-label="回答として採用"
                       iconType={x.is_answer ? "starFilledSpace" : "starEmpty"}
                       onClick={() => handleOnclickComment(x)}
+                      disabled={!canEdit}
                     />),
           children: (<EuiMarkdownFormat>{x.comment}</EuiMarkdownFormat>)
         }})} />
