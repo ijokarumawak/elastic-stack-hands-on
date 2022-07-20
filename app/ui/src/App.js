@@ -21,6 +21,7 @@ import KibanaSampleDataSet from './kibana/SampleDataSet.js'
 import FilebeatSimple from './filebeat/Simple.js'
 import FilebeatModule from './filebeat/Module.js'
 import FilebeatDocker from './filebeat/Docker.js'
+import Logstash from './logstash/Logstash.js'
 import PythonQARequirements from './python/QARequirements.js'
 import PythonQA from './python/QA.js'
 import Goal from './Goal.js'
@@ -104,14 +105,17 @@ const contents = [
     {location: '/kibana/dashboard', title: 'ダッシュボード', tag: <KibanaDashboard />},
     {location: '/kibana/samples', title: 'サンプルデータセット', tag: <KibanaSampleDataSet />},
   ]},
+  {title: 'Python', contents: [
+    {location: '/python/qa_requirements', title: 'QA アプリ要件', tag: <PythonQARequirements />},
+    {location: '/python/qa', title: 'QA アプリ', tag: <PythonQA />}
+  ]},
   {title: 'Beats', contents: [
     {location: '/filebeat/simple', title: 'Filebeat', tag: <FilebeatSimple />},
     {location: '/filebeat/module', title: 'Filebeat モジュール', tag: <FilebeatModule />},
     {location: '/filebeat/docker', title: 'Docker コンテナを自動監視', tag: <FilebeatDocker />}
   ]},
-  {title: 'Python', contents: [
-    {location: '/python/qa_requirements', title: 'QA アプリ要件', tag: <PythonQARequirements />},
-    {location: '/python/qa', title: 'QA アプリ', tag: <PythonQA />}
+  {title: 'Logstash', contents: [
+    {location: '/logstash', title: 'Logstash', tag: <Logstash />}
   ]}
 ];
 
