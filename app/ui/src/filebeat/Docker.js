@@ -15,7 +15,7 @@ Filebeat には Docker コンテナや、 Kubernetes で利用できる Auto Dis
 
 さらに、ログ情報に加え、 Metricbeat により各コンテナのメトリックデータも収集し、よりオブザーバビリティを高めましょう。
 
-![](../images/beat-auto-discover.png)
+![](/images/beat-auto-discover.png)
 
 
 ### Filebeat でログを収集

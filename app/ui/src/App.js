@@ -23,6 +23,7 @@ import FilebeatModule from './filebeat/Module.js'
 import FilebeatDocker from './filebeat/Docker.js'
 import LogstashIntro from './logstash/Intro.js'
 import LogstashLoadCSV from './logstash/LoadCSV.js'
+import PythonIntro from './python/Intro.js'
 import PythonQARequirements from './python/QARequirements.js'
 import PythonQA from './python/QA.js'
 import Goal from './Goal.js'
@@ -93,31 +94,32 @@ appendIconComponentCache({
 
 const contents = [
   {title: 'はじめに', contents: [
-    {location: '/intro', title: 'Elastic Stack とは', tag: <Intro />},
-    {location: '/setup', title: '環境のセットアップ', tag: <Setup />},
+    {location: '/doc/intro', title: 'Elastic Stack とは', tag: <Intro />},
+    {location: '/doc/setup', title: '環境のセットアップ', tag: <Setup />},
   ]},
   {title: 'Elasticsearch', contents: [
-    {location: '/elasticsearch/document', title: 'ドキュメント', tag: <ElasticsearchDocument />},
-    {location: '/elasticsearch/index', title: 'インデックス', tag: <ElasticsearchIndex />},
+    {location: '/doc/elasticsearch/document', title: 'ドキュメント', tag: <ElasticsearchDocument />},
+    {location: '/doc/elasticsearch/index', title: 'インデックス', tag: <ElasticsearchIndex />},
   ]},
   {title: 'Kibana', contents: [
-    {location: '/kibana/discover', title: 'Discover', tag: <KibanaDiscover />},
-    {location: '/kibana/lens', title: 'Lens', tag: <KibanaLens />},
-    {location: '/kibana/dashboard', title: 'ダッシュボード', tag: <KibanaDashboard />},
-    {location: '/kibana/samples', title: 'サンプルデータセット', tag: <KibanaSampleDataSet />},
+    {location: '/doc/kibana/discover', title: 'Discover', tag: <KibanaDiscover />},
+    {location: '/doc/kibana/lens', title: 'Lens', tag: <KibanaLens />},
+    {location: '/doc/kibana/dashboard', title: 'ダッシュボード', tag: <KibanaDashboard />},
+    {location: '/doc/kibana/samples', title: 'サンプルデータセット', tag: <KibanaSampleDataSet />},
   ]},
   {title: 'Python', contents: [
-    {location: '/python/qa_requirements', title: 'QA アプリ要件', tag: <PythonQARequirements />},
-    {location: '/python/qa', title: 'QA アプリ', tag: <PythonQA />}
+    {location: '/doc/python/intro', title: 'カスタムアプリケーション', tag: <PythonIntro />},
+    {location: '/doc/python/qa_requirements', title: 'QA アプリ要件', tag: <PythonQARequirements />},
+    {location: '/doc/python/qa', title: 'QA アプリ', tag: <PythonQA />}
   ]},
   {title: 'Beats', contents: [
-    {location: '/filebeat/simple', title: 'Filebeat', tag: <FilebeatSimple />},
-    {location: '/filebeat/module', title: 'Filebeat モジュール', tag: <FilebeatModule />},
-    {location: '/filebeat/docker', title: 'Docker コンテナを自動監視', tag: <FilebeatDocker />}
+    {location: '/doc/filebeat/simple', title: 'Filebeat', tag: <FilebeatSimple />},
+    {location: '/doc/filebeat/module', title: 'Filebeat モジュール', tag: <FilebeatModule />},
+    {location: '/doc/filebeat/docker', title: 'Docker コンテナを自動監視', tag: <FilebeatDocker />}
   ]},
   {title: 'Logstash', contents: [
-    {location: '/logstash/intro', title: 'Logstashの基本', tag: <LogstashIntro />},
-    {location: '/logstash/load_csv', title: 'CSV ファイル読込', tag: <LogstashLoadCSV />}
+    {location: '/doc/logstash/intro', title: 'Logstashの基本', tag: <LogstashIntro />},
+    {location: '/doc/logstash/load_csv', title: 'CSV ファイル読込', tag: <LogstashLoadCSV />}
   ]}
 ];
 
@@ -192,7 +194,7 @@ function Next(props) {
   const navigate = useNavigate();
   return props.index < flatContents.length -1
     ? <EuiButtonIcon iconType="arrowRight" aria-label="next" onClick={() => move(navigate, props.index + 1)} />
-    : <EuiButtonIcon iconType="arrowRight" aria-label="next" onClick={() => moveTo(navigate, '/goal')} />;
+    : <EuiButtonIcon iconType="arrowRight" aria-label="next" onClick={() => moveTo(navigate, '/doc/goal')} />;
 }
 
 function Header() {
@@ -316,7 +318,7 @@ function App() {
               } />
             )
           })}
-          <Route key="goal" path="/goal" element={<Goal />} />
+          <Route key="goal" path="/doc/goal" element={<Goal />} />
           <Route key="home" path="/" element={<Home />} />
         </Routes>
       </EuiProvider>

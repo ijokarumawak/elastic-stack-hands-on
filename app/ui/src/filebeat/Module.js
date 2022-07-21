@@ -36,7 +36,7 @@ function Module() {
 filebeat/filebeat-module-nginx.sh
 \`\`\`
 
-![](../images/filebeat-nginx.png)
+![](/images/filebeat-nginx.png)
 `}</EuiMarkdownFormat>
   );
 }

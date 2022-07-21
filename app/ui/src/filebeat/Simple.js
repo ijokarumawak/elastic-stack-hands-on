@@ -20,7 +20,7 @@ Docker を使って Filebeat が実行できるようにしてあります。
 
 まずは一番簡単な Filebeat 設定で実行してみましょう。
 
-![](../images/filebeat-simple.png)
+![](/images/filebeat-simple.png)
 
 次のシェルを実行すると、 CentOS をベースイメージとする Filebeat の Docker コンテナが起動します。
 その際、ローカルマシンにある *filebeat-simple.yml* を Filebeat の設定ファイルである \`filebeat.yml\` として、 *simple.log* を CentOS 上の */var/log/simple.log* としてマウントします。コンテナ内で Filebeat が起動する仕組みです:

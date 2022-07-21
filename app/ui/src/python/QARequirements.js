@@ -1,4 +1,6 @@
 import React, {useState, useEffect, Fragment} from 'react';
+import example from "./example";
+import Mermaid from '../Mermaid';
 
 import {
   EuiMarkdownFormat
@@ -8,6 +10,14 @@ function QARequirements() {
 
   return (
   <>
+<Mermaid chart={`
+  flowchart LR
+
+  A[Hard] -->|Text| B(Round)
+  B --> C{Decision}
+  C -->|One| D[Result 1]
+  C -->|Two| E[Result 2]
+`} />
 <EuiMarkdownFormat>{`
 ## QA アプリ
 
@@ -106,7 +116,6 @@ curl -i -XPOST localhost:8000/qa/questions/_search -H 'Content-Type: application
 \`\`\`
 
 
-[Python Elasticsearch Client](https://elasticsearch-py.readthedocs.io/en/v8.3.2/)
 
 ## 排他制御
 [楽観ロック](https://www.elastic.co/guide/en/elasticsearch/reference/current/optimistic-concurrency-control.html)
