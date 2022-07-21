@@ -21,7 +21,8 @@ import KibanaSampleDataSet from './kibana/SampleDataSet.js'
 import FilebeatSimple from './filebeat/Simple.js'
 import FilebeatModule from './filebeat/Module.js'
 import FilebeatDocker from './filebeat/Docker.js'
-import Logstash from './logstash/Logstash.js'
+import LogstashIntro from './logstash/Intro.js'
+import LogstashLoadCSV from './logstash/LoadCSV.js'
 import PythonQARequirements from './python/QARequirements.js'
 import PythonQA from './python/QA.js'
 import Goal from './Goal.js'
@@ -115,7 +116,8 @@ const contents = [
     {location: '/filebeat/docker', title: 'Docker コンテナを自動監視', tag: <FilebeatDocker />}
   ]},
   {title: 'Logstash', contents: [
-    {location: '/logstash', title: 'Logstash', tag: <Logstash />}
+    {location: '/logstash/intro', title: 'Logstashの基本', tag: <LogstashIntro />},
+    {location: '/logstash/load_csv', title: 'CSV ファイル読込', tag: <LogstashLoadCSV />}
   ]}
 ];
 
