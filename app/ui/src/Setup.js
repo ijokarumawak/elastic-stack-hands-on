@@ -32,7 +32,7 @@ Elastic Cloud を利用するとデフォルトでセキュリティが有効に
 セキュアな環境を保つために、必要な設定を行っていきましょう。
 以降の手順で、必要最小限の権限を持った \`es-hands-on\` というユーザを作成していきます。
 
-![](images/hands-on-setup.png)
+![](/images/hands-on-setup.png)
 
 ### Kibana スペースを作ろう
 
@@ -57,7 +57,7 @@ Elastic Cloud を利用するとデフォルトでセキュリティが有効に
 ### Kibana Dev Tools Console を使ってみよう
 
 Kibana メインメニューから *Management* にある *Dev Tools* を選択します。するとこんな画面が表示されます:
-![](images/kibana-console.png)
+![](/images/kibana-console.png)
 
 この Kibana Console からは、 [Elasticsearch の API](https://www.elastic.co/guide/en/elasticsearch/reference/current/rest-apis.html) が簡単に実行できます。
 

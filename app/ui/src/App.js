@@ -19,6 +19,7 @@ import KibanaLens from './kibana/Lens.js'
 import KibanaDashboard from './kibana/Dashboard.js'
 import KibanaSampleDataSet from './kibana/SampleDataSet.js'
 import FilebeatSimple from './filebeat/Simple.js'
+import FilebeatParseLog from './filebeat/ParseLog.js'
 import FilebeatModule from './filebeat/Module.js'
 import FilebeatDocker from './filebeat/Docker.js'
 import LogstashIntro from './logstash/Intro.js'
@@ -114,6 +115,7 @@ const contents = [
   ]},
   {title: 'Beats', contents: [
     {location: '/doc/filebeat/simple', title: 'Filebeat', tag: <FilebeatSimple />},
+    {location: '/doc/filebeat/sparse_log', title: 'ログのパース', tag: <FilebeatParseLog />},
     {location: '/doc/filebeat/module', title: 'Filebeat モジュール', tag: <FilebeatModule />},
     {location: '/doc/filebeat/docker', title: 'Docker コンテナを自動監視', tag: <FilebeatDocker />}
   ]},
