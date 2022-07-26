@@ -22,6 +22,7 @@ import FilebeatSimple from './filebeat/Simple.js'
 import FilebeatParseLog from './filebeat/ParseLog.js'
 import FilebeatModule from './filebeat/Module.js'
 import FilebeatDocker from './filebeat/Docker.js'
+import FilebeatIntegrations from './filebeat/Integrations.js'
 import LogstashIntro from './logstash/Intro.js'
 import LogstashLoadCSV from './logstash/LoadCSV.js'
 import PythonIntro from './python/Intro.js'
@@ -117,7 +118,8 @@ const contents = [
     {location: '/doc/filebeat/simple', title: 'Filebeat', tag: <FilebeatSimple />},
     {location: '/doc/filebeat/sparse_log', title: 'ログのパース', tag: <FilebeatParseLog />},
     {location: '/doc/filebeat/module', title: 'Filebeat モジュール', tag: <FilebeatModule />},
-    {location: '/doc/filebeat/docker', title: 'Docker コンテナを自動監視', tag: <FilebeatDocker />}
+    {location: '/doc/filebeat/docker', title: 'Docker コンテナを自動監視', tag: <FilebeatDocker />},
+    {location: '/doc/filebeat/integrations', title: 'データ統合', tag: <FilebeatIntegrations />}
   ]},
   {title: 'Logstash', contents: [
     {location: '/doc/logstash/intro', title: 'Logstashの基本', tag: <LogstashIntro />},
