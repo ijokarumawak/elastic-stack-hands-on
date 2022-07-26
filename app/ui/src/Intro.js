@@ -1,8 +1,7 @@
-import React from 'react';
-import {Section, Markdown} from './Common.js'
+import {EuiMarkdownFormat} from '@elastic/eui';
 
 function WhatIsElasticStack() {
-  return <Section><Markdown>{
+  return <EuiMarkdownFormat>{
 `## Elastic Stack とは
 
 Elastic Stack とは Elasticsearch を中核とするソフトウェア群のことです。
@@ -30,17 +29,15 @@ Elastic では主な三つのユースケースにすぐに利用可能なソリ
 
 検索は全てのシステムで必要になる機能です。多彩な [顧客事例](https://www.elastic.co/jp/customers/) を確認しましょう。
 エンタープライズサーチ、オブザーバビリティ、セキュリティと各ユースケース毎に事例集を閲覧できます。
-`}</Markdown></Section>;
+`}</EuiMarkdownFormat>;
 }
 
-class Intro extends React.Component {
-  render() {
-    return (
-      <div>
-        <WhatIsElasticStack />
-      </div>
-    );
-  }
+function Intro(){
+  return (
+    <div>
+      <WhatIsElasticStack />
+    </div>
+  );
 }
 
 export default Intro;

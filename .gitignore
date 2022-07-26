@@ -2,4 +2,6 @@
 .idea
 .DS_Store
 env.sh
-
+__pycache__
+app/ui/public/eui_theme_dark.css
+app/ui/public/eui_theme_light.css

@@ -2,6 +2,8 @@ logging.level: info
 
 filebeat.modules:
   - module: nginx
+    access:
+      enabled: true
 
 setup.kibana.space.id: es-hands-on
 
