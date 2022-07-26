@@ -150,6 +150,7 @@ PUT _security/user/es-hands-on
 
 \`\`\`json
 bin/app-api.sh
+bin/python.sh
 \`\`\`
 
 このハンズオン環境に設定されているユーザが、必要な権限を持っているかチェックしてみましょう。

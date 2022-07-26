@@ -8,7 +8,7 @@
 ## 必要スペック
 - 2 CPU cores
 - 2 GB RAM
-- 30 GB Storage (Docker イメージの保存に結構な量が必要)
+- 20 GB Storage (Docker イメージの保存に結構な量が必要)
 
 <div id="how-to-use" />
 
@@ -34,7 +34,7 @@ bin/start-hands-on.sh
 マシンの IP アドレスをブラウザに入力してアクセス。
 
 Cloud 9 の場合、 `bin/check-ec2-public-ip.sh ` で IP アドレス取得できます。
-
+Security Group の設定でポート 80 へのアクセスを許可する必要があります。
 
 ハンズオン画面ベーシック認証のユーザ名パスワード:
 - username: `es-hands-on`
@@ -47,7 +47,7 @@ Cloud 9 の場合、 `bin/check-ec2-public-ip.sh ` で IP アドレス取得で�
 3. インスタンスタイプ: t3.small (2 GiB RAM + 2 vCPU)
 4. あとはデフォルトで次へで、 Create environment
 5. 10 GB しかないので、ストレージサイズを増やすため、一度 EC2 を停止 `sudo poweroff`
-6. EC2 画面からインスタンスのストレージをたどり、 10GB から 30GB へ
+6. EC2 画面からインスタンスのストレージをたどり、 10GB から 20GB へ
 7. EC2 を再起動する
 8. Cloud 9 画面に戻り、上記の [使い方](#how-to-use) から続ける
 
