@@ -46,20 +46,54 @@ class SearchOptions(BaseModel):
 
 @app.post("/qa/questions")
 def add_question(question: Question):
-    return {"message": "Not implemented yet."}
+    resp = es.index(index=qa_index, refresh="wait_for", document=jsonable_encoder(question))
+    return resp
 
 
 @app.put("/qa/questions/{id}")
 def add_question(id, question: Question):
-    return {"message": "Not implemented yet."}
+    resp = es.index(index=qa_index, id=id, refresh="wait_for", document=jsonable_encoder(question))
+    return resp
 
 
 @app.get("/qa/questions/{id}")
 def get_question(id):
-    return {"message": "Not implemented yet."}
+    resp = es.get(index=qa_index, id=id)
+    return resp
 
 
 @app.post("/qa/questions/_search")
 def get_questions(options: SearchOptions):
-    return {"message": "Not implemented yet."}
+    return search_questions(options)
+
+
+def search_questions(options: Union[SearchOptions, None] = None):
+    must = []
+    filter = []
+    if options:
+        if options.query:
+            must.append({"multi_match": {
+                "fields": [
+                    "title",
+                    "body",
+                    "user",
+                    "comments.comment",
+                    "comments.user"
+                ],
+                "query": options.query
+            }})
+
+        if options.user:
+            filter.append({"match": {
+                "user": options.user
+            }})
+
+        if options.status:
+            filter.append({"match": {
+                "status": options.status
+            }})
+
+    resp = es.search(index=qa_index, sort=[{"timestamp": {"order": "desc"}}],
+                     query={"bool": {"must": must, "filter": filter}})
+    return resp
 

@@ -10,40 +10,50 @@ function QARequirements() {
 
   return (
   <>
-<Mermaid chart={`
-  flowchart LR
-
-  A[Hard] -->|Text| B(Round)
-  B --> C{Decision}
-  C -->|One| D[Result 1]
-  C -->|Two| E[Result 2]
-`} />
 <EuiMarkdownFormat>{`
 ## QA アプリ
 
-TODO: Python の API を実装して QA アプリを開発
+Python の API を実装して QA アプリを開発してみましょう。実装する機能は以下の通りです:
 
-- 質問が検索できる
 - 質問が入力できる
-- 質問が修正できる
+- 質問が検索できる
 - 回答が入力できる
 
-JSON ドキュメントのデザイン
+あらかじめ UI と API の雛形は作成済です。UI から呼び出される API を実装してください。API では Elasticsearch へのドキュメント保存、検索などを実装します。 Python API では [FastAPI](https://fastapi.tiangolo.com/) というフレームワークを利用しています。
 
-モデリングの方法は大きく二つのアプローチ。質問と回答を同一ドキュメントとして扱う、あるいは別々に管理する。今回は検索性を優先し、前者とする。
+`}</EuiMarkdownFormat>
 
-質問:
-- @timestamp
-- 投稿者 (env-key)
-- tag
-- タイトル
-- 本文 markdown
-- ステータス (open, closed)
-- 回答 (n):
-  - @timestamp
-  - 投稿者 (env-key)
-  - 質問 ID
-  - 本文 markdown
+<Mermaid chart={`
+flowchart LR
+  UI[QA APP]-->API[Python API]
+  API-->Index
+  subgraph Elasticsearch
+    Index
+  end
+`} />
+
+<EuiMarkdownFormat>{`
+## JSON ドキュメントのデザイン
+
+前述の要件から、 Elasticsearch に保存する JSON ドキュメントをどのように設計すればよいでしょうか。
+大きく二つのアプローチがあるでしょう。質問と回答を同一ドキュメントとして扱う、あるいは別々に管理する方法です。
+Elasticsearch では検索効率を高めるために、関連する情報をひとつのドキュメント内にまとめるのがベストプラクティスです。 RDB とは違い、正規化は行いません。今回は次のようにドキュメントをモデリングしました:
+
+- timestamp
+- user 投稿者 (env-key)
+- tags (n)
+- title タイトル
+- body 本文 markdown
+- status ステータス (open, closed)
+- comments コメント (n):
+  - timestamp
+  - user 投稿者 (env-key)
+  - comment 本文 markdown
+  - is_answer コメントが回答として採用されたか
+
+それぞれのフィールドのデータ型は何がよいでしょうか？少し考えてみましょう。
+
+今回は次のようにマッピングを定義しました:
 
 \`\`\`json
 PUT es-hands-on-qa
@@ -90,36 +100,10 @@ PUT es-hands-on-qa
 }
 \`\`\`
 
-質問を作成
-\`\`\`bash
-curl -i -XPOST localhost:8000/qa/questions/ -H 'Content-Type: application/json' -d '{"timestamp": "2022-07-11T12:17:01+09:00", "user": "${process.env.REACT_APP_KEY}", "tags": ["Python", "Elasticsearch"], "title": "Python クライアント", "body": "Python 用の公式ライブラリはありますか?"}'
-\`\`\`
+### 排他制御はどうする？
+このように質問と回答を一つのドキュメントとして扱う場合、同時に更新されるケースを制御する仕組みが必要です。今回のサンプルアプリではそこまでの作り込みはしませんが、 Elasticsearch で排他制御を行う場合、[楽観ロック](https://www.elastic.co/guide/en/elasticsearch/reference/current/optimistic-concurrency-control.html)か [Update](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html) を使うとよいでしょう。
 
-質問を取得
-\`\`\`bash
-curl -i -XGET localhost:8000/qa/questions/2KdaFIIBOaP8JqATcdFM -H 'Content-Type: application/json'
-\`\`\`
-
-質問を全件取得
-\`\`\`bash
-curl -i -XGET localhost:8000/qa/questions -H 'Content-Type: application/json'
-\`\`\`
-
-質問を検索
-\`\`\`bash
-curl -i -XGET localhost:8000/qa/questions -H 'Content-Type: application/json' -d '{"query": "タイムスタンプ"}'
-\`\`\`
-
-質問を検索 (POST)
-\`\`\`bash
-curl -i -XPOST localhost:8000/qa/questions/_search -H 'Content-Type: application/json' -d '{"query": "タイムスタンプ"}'
-\`\`\`
-
-
-
-## 排他制御
-[楽観ロック](https://www.elastic.co/guide/en/elasticsearch/reference/current/optimistic-concurrency-control.html)
-
+それでは Python のコーディングを始めましょう。
 
 `}</EuiMarkdownFormat>
 

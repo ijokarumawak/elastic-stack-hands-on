@@ -14,6 +14,7 @@ import Intro from './Intro.js'
 import Setup from './Setup.js'
 import ElasticsearchDocument from './elasticsearch/Document.js'
 import ElasticsearchIndex from './elasticsearch/Index.js'
+import ElasticsearchMapping from './elasticsearch/Mapping.js'
 import KibanaDiscover from './kibana/Discover.js'
 import KibanaLens from './kibana/Lens.js'
 import KibanaDashboard from './kibana/Dashboard.js'
@@ -27,11 +28,13 @@ import LogstashIntro from './logstash/Intro.js'
 import LogstashLoadCSV from './logstash/LoadCSV.js'
 import PythonIntro from './python/Intro.js'
 import PythonQARequirements from './python/QARequirements.js'
+import PythonQADevelopment from './python/QADevelopment.js'
 import PythonQA from './python/QA.js'
 import Goal from './Goal.js'
 
 import {
   EuiProvider,
+  EuiPage,
   EuiPageTemplate,
   EuiFlexGroup,
   EuiFlexItem,
@@ -41,6 +44,7 @@ import {
   EuiSideNav,
   EuiTitle,
   EuiSelect,
+  EuiBadge,
   EuiButtonIcon,
   EuiMarkdownFormat,
   EuiSpacer,
@@ -102,6 +106,7 @@ const contents = [
   {title: 'Elasticsearch', contents: [
     {location: '/doc/elasticsearch/document', title: 'ドキュメント', tag: <ElasticsearchDocument />},
     {location: '/doc/elasticsearch/index', title: 'インデックス', tag: <ElasticsearchIndex />},
+    {location: '/doc/elasticsearch/mapping', title: 'マッピング', tag: <ElasticsearchMapping />},
   ]},
   {title: 'Kibana', contents: [
     {location: '/doc/kibana/discover', title: 'Discover', tag: <KibanaDiscover />},
@@ -112,6 +117,7 @@ const contents = [
   {title: 'Python', contents: [
     {location: '/doc/python/intro', title: 'カスタムアプリケーション', tag: <PythonIntro />},
     {location: '/doc/python/qa_requirements', title: 'QA アプリ要件', tag: <PythonQARequirements />},
+    {location: '/doc/python/qa_development', title: 'QA アプリ開発', tag: <PythonQADevelopment />},
     {location: '/doc/python/qa', title: 'QA アプリ', tag: <PythonQA />}
   ]},
   {title: 'Beats', contents: [
@@ -140,7 +146,7 @@ function getContent(pathname) {
     case '/': {
       return {title: ''};
     }
-    case '/goal': {
+    case '/doc/goal': {
       return {title: 'おつかれさまでした 🎉'};
     }
     default: {}
@@ -151,11 +157,9 @@ function getContent(pathname) {
 }
 
 function Home() {
-  return (<>
-    <h1>Home</h1>
-    <EuiMarkdownFormat>{`環境ID: \`${process.env.REACT_APP_KEY}\``}</EuiMarkdownFormat>
+  return (<EuiPage>
     <Link to={flatContents[0].location}>ハンズオンをはじめる</Link>
-  </>);
+  </EuiPage>);
 }
 
 
@@ -295,7 +299,7 @@ function App() {
               <Header />
             </EuiHeaderSectionItem>
           </EuiHeaderSection>
-          <EuiHeaderSection>
+          <EuiHeaderSection side='right' grow={false} style={{justifyContent: 'space-between', gap: '10px'}}>
             <EuiHeaderSectionItem>
               <EuiSelect
                 options={themes}
@@ -303,6 +307,9 @@ function App() {
                 onChange={handleChange}
                 compressed={true}
               />
+            </EuiHeaderSectionItem>
+            <EuiHeaderSectionItem>
+              <EuiBadge>{process.env.REACT_APP_KEY}</EuiBadge>
             </EuiHeaderSectionItem>
           </EuiHeaderSection>
         </EuiHeader>

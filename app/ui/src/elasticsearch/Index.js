@@ -1,7 +1,9 @@
 import {EuiMarkdownFormat} from '@elastic/eui';
+import Mermaid from '../Mermaid';
 
 function Index() {
   return (
+<>
 <EuiMarkdownFormat>{`
 ## インデックスとは
 
@@ -16,119 +18,76 @@ GET es-hands-on-${process.env.REACT_APP_KEY}
 レスポンスで返される \`mappings\` には、ドキュメントのスキーマ情報が設定されています。
 インデックスが自動作成される際に、保存した JSON ドキュメントの値により自動でデータ型を推測して設定してくれます。
 
-\`settings\` にはインデックス単位の設定があります。例えば \`number_of_shards\` はインデックスのプライマリシャード数です。
-複数の Elasticsearch ノードで分散、分担して単一のインデックスを扱う場合にシャードの数を増やします。
 
-## 二つの文字列型、 text と keyword
-Elasticsearch を使いこなす上で、避けて通れないのが、 \`text\` と \`keyword\` 型の違いです。
-簡単に言うと:
-- text: 全文検索用、文字列を一定のルールで分解、正規化し、検索語で探しやすくする
-- keyword: 完全一致用、入力文字列はそのままの形で保存される、ソート、アグリゲーションに利用可能
+## データ分散の仕組み
 
-Elasticsearch はインデックスを自動生成する際に文字列のフィールドをマルチフィールドという仕組みを使って、 text, keyword の二つの型のフィールドを生成してくれます。
-例えば、先ほど作成した es-hands-on インデックスの \`message\` フィールドは次のようになっています:
+\`settings\` にはインデックス単位の設定があります。例えば \`number_of_shards\` はインデックスのプライマリシャード数です。単一のインデックスを複数の Elasticsearch ノードで分散、分担する場合にシャードの数を増やします。
 
-\`\`\`json
-{
-  "message" : {
-    "type" : "text",
-    "fields" : {
-      "keyword" : {
-        "type" : "keyword",
-        "ignore_above" : 256
-      }
-    }
-  }
-}
-\`\`\`
+- プライマリ: データ更新を受け付けるシャード
+- レプリカ: 耐障害性向上、検索負荷分散のためのシャード
 
-これは、 Elasticsearch には対象のフィールドが全文検索用なのか、集計用のフィールドなのか判断できないためです。
-ただし、多くの場合これは冗長なマッピング定義となり、インデックスサイズが必要以上に大きくなる原因となる場合があります。
+シャードの数は、データ投入をスケールさせたい場合と、参照をスケールさせたい場合の大きくふたつの考え方があります。
 
-## マッピングを最適化
+### データ投入をスケールさせたい場合
 
-事前に保存するデータのフィールド仕様が分かっているのであれば、明示的にマッピング情報を指定してインデックスを作成すると良いでしょう。
-ただ、 Elasticsearch では既存フィールドのデータ型を ***変更することはできません***。
-新しいフィールド定義は追加できますが、既存のフィールドのデータ型を変更する場合には別のインデックスを作る必要があります。
+大量のデータを投入する必要があり、一台のサーバーだけではインジェストスループットが十分でない場合、サーバーを追加してデータ投入の負荷を分散させます。
 
-手順としては、次のようになります:
-1. 新しいインデックスを新しいマッピングで作成する
-2. reindex API で古いインデックスからデータを登録し直す
-3. 古いインデックスを削除する
-4. 古いインデックスの名前で新しいインデックスへのエイリアスを作成する
-
-すると、当該インデックスにアクセスしているクライアントアプリケーションなどを変更することなくマッピングの最適化が可能になります。
-それでは、以下の手順を実行し、インデックスを最適化してみましょう。
-
-新しいインデックスを新しいマッピングで作成する:
-\`\`\`json
-PUT es-hands-on-${process.env.REACT_APP_KEY}-v2
-{
-  "mappings": {
-      "properties" : {
-        "@timestamp" : {
-          "type" : "date"
-        },
-        "labels" : {
-          "properties" : {
-            "api" : {
-              "type" : "keyword"
-            }
-          }
-        },
-        "message" : {
-          "type" : "text"
-        }
-      }
-    }
-}
-\`\`\`
-
-新しいインデックスにデータを投入し直す:
-\`\`\`json
-POST _reindex
-{
-  "source": {
-    "index": "es-hands-on-${process.env.REACT_APP_KEY}"
-  },
-  "dest": {
-    "index": "es-hands-on-${process.env.REACT_APP_KEY}-v2"
-  }
-}
-\`\`\`
-
-古いインデックスを削除する:
-\`\`\`json
-DELETE es-hands-on-${process.env.REACT_APP_KEY}
-\`\`\`
-
-古いインデックスの名前でエイリアスを作成する:
-\`\`\`json
-POST _aliases
-{
-  "actions": [
-    {
-      "add": {
-        "index": "es-hands-on-${process.env.REACT_APP_KEY}-v2",
-        "alias": "es-hands-on-${process.env.REACT_APP_KEY}"
-      }
-    }
-  ]
-}
-\`\`\`
-
-これで古いインデックス名でも継続してアクセスできます:
-\`\`\`json
-GET es-hands-on-${process.env.REACT_APP_KEY}/_search
-{
-  "query": {
-    "match": {
-      "message": "ドキュメント"
-    }
-  }
-}
-\`\`\`
 `}</EuiMarkdownFormat>
+
+<Mermaid chart={`
+flowchart LR
+    subgraph Elasticsearch
+      Index--write-->Shard_P0
+      Index--write-->Shard_P1
+      Index--write-->Shard_P2
+      subgraph Node1
+        Shard_P0
+      end
+      subgraph Node2
+        Shard_P1
+      end
+      subgraph Node3
+        Shard_P2
+      end
+    end
+`} />
+
+<EuiMarkdownFormat>{`
+
+### データ参照をスケールさせたい場合
+
+EC サイトなど、検索をヘビーに行うシステムでは、同時に多数のユーザーからの検索リクエストをさばく必要があります。複数台のサーバーで同一のデータを持つことにより、検索リクエストを分散でき、スループットを高めることができます。
+
+`}</EuiMarkdownFormat>
+
+<Mermaid chart={`
+flowchart LR
+    subgraph Elasticsearch
+      Index--write-->Shard_P0
+      Index--read-->Shard_P0
+      Index--read-->Shard_R0_1[Shard_R0]
+      subgraph Node1
+        Shard_P0
+      end
+      subgraph Node2
+        Shard_R0_1
+        Shard_P0-.copy-.->Shard_R0_1
+      end
+      subgraph Node3
+        Shard_R0_2
+        Shard_P0-.copy-.->Shard_R0_2
+      end
+      Index--read-->Shard_R0_2[Shard_R0]
+    end
+`} />
+
+<EuiMarkdownFormat>{`
+
+> これは一つのインデックスについて局所的にみた場合の話です。実際は一つの Elasticsearch クラスタ内に複数のインデックスを作成し、さまざまなワークロードが発生します。どこにボトルネックがあるかを見極め、適切な方法で改善する必要があります。
+
+`}</EuiMarkdownFormat>
+
+</>
   );
 }
 

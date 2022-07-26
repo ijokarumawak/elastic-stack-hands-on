@@ -145,7 +145,7 @@ function QuestionEditor(props) {
   if (isFlyoutVisible) {
 
     let questionForm;
-    let commentAction;
+    let commentForm;
     if (canEdit) {
       questionForm = (
         <EuiForm>
@@ -171,6 +171,17 @@ function QuestionEditor(props) {
           <EuiMarkdownEditor value={body} onChange={setBody} />
         </EuiForm>
       )
+      if (questionId) {
+        commentForm = (
+          <>
+            <EuiSpacer />
+            <EuiTitle size="m"><h2>回答</h2></EuiTitle>
+            <EuiSpacer />
+
+            <EuiMarkdownEditor value={comment} onChange={setComment} />
+          </>
+        )
+      }
     } else {
       questionForm = (
         <>
@@ -220,12 +231,7 @@ function QuestionEditor(props) {
                     />),
           children: (<EuiMarkdownFormat>{x.comment}</EuiMarkdownFormat>)
         }})} />
-
-    <EuiSpacer />
-    <EuiTitle size="m"><h2>回答</h2></EuiTitle>
-    <EuiSpacer />
-
-    <EuiMarkdownEditor value={comment} onChange={setComment} />
+        {commentForm}
   </EuiFlyoutBody>
   <EuiFlyoutFooter>
     <EuiFlexGroup justifyContent="spaceBetween">

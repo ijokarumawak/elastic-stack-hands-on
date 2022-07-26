@@ -1,11 +1,12 @@
 import {EuiMarkdownFormat} from '@elastic/eui';
+import Mermaid from '../Mermaid';
 
 function Document() {
   const now = new Date();
   now.setDate(now.getDate() - 1);
   const today = now.toJSON().split('T')[0];
   return (
-
+<>
 <EuiMarkdownFormat>{`
 ## ドキュメントを保存、検索してみよう
 
@@ -15,6 +16,19 @@ Elasticsearch は REST API を実装しています。送信する HTTP リク�
 Elasticsearch では JSON ドキュメントを格納する場所のことをインデックスといいます。
 事前にインデックスを作成しておかなくても、デフォルトではドキュメント保存時に作成されます。
 ドキュメントが保存されると同時にインデックスも作成されます。
+
+`}</EuiMarkdownFormat>
+
+<Mermaid chart={`
+flowchart LR
+    App-->API
+    subgraph Elasticsearch
+    API-->Index
+    Index---Documents
+    end
+`} />
+
+<EuiMarkdownFormat>{`
 
 次の API を Kibana コンソールから実行しましょう:
 \`\`\`json
@@ -31,7 +45,7 @@ ID を指定して保存したドキュメントを取得できます:
 GET es-hands-on-${process.env.REACT_APP_KEY}/_doc/1
 \`\`\`
 
-ドキュメントの ID を指定せずに保存することもできます:
+ドキュメントの ID を指定せずに保存することもできます。この場合、 Elasticsearch がユニークな ID を自動で付与します:
 \`\`\`json
 POST es-hands-on-${process.env.REACT_APP_KEY}/_doc
 {
@@ -41,7 +55,7 @@ POST es-hands-on-${process.env.REACT_APP_KEY}/_doc
 }
 \`\`\`
 
-バルク API を実行してみましょう:
+複数のドキュメントをひとつの API 呼び出しで効率的に保存できる、バルク API を実行してみましょう:
 \`\`\`json
 POST es-hands-on-${process.env.REACT_APP_KEY}/_bulk
 {"index":{"_id":2}}
@@ -69,8 +83,13 @@ GET es-hands-on-${process.env.REACT_APP_KEY}/_search
   }
 }
 \`\`\`
-`}</EuiMarkdownFormat>
 
+## Challenge!
+
+- Elasticsearch の [API リファレンス](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs.html)をみてみましょう
+
+`}</EuiMarkdownFormat>
+</>
   );
 }
 
