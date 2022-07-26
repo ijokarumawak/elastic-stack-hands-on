@@ -39,40 +39,53 @@ JSON への変換は \`jsonable_encoder\` を使います。インデックス�
 return es.index(index=qa_index, document=jsonable_encoder(question))
 \`\`\`
 
+Python API は自動リロード対応にしてあります。ファイルを保存するだけで更新できます。
 これで QA アプリの画面から新しい質問が送信できるようになりました。ですが、質問を取得する API をまだ実装していないので画面には保存した質問は表示されません。
 
 ### 2. 質問を取得する
 
+続いて、QA アプリに質問の一覧を表示できるようにしましょう。検索条件を利用する部分は後回しとして、 \`get_questions\` 関数で結果を全て返すようにしてみます。
 
+\`\`\`python
+return es.search(index=qa_index)
+\`\`\`
+
+これで、 Elasticsearch に保存された質問が一覧で表示されるようになりました。各質問のタイトルをクリックすると詳細画面が表示されます。
+
+しかし、もうひとつ新しい質問を投稿してみても、入力パネルが閉じた後の質問一覧にはすぐには表示されません。表示を更新すると出てきます。UI としては質問入力画面を閉じたら再検索を実行しているのですが、最後に入力した質問が検索結果に含まれていないのです。これは、 Elasticsearch が非同期で検索用の転置インデックスを作成していることが原因です。
+
+今回のように、保存したドキュメントをすぐさま検索可能とする場合、保存時に \`refresh\` というオプションを指定します。 \`add_question\` を修正しましょう:
+\`\`\`python
+return es.index(index=qa_index, document=jsonable_encoder(question), refresh="wait_for")
+\`\`\`
+
+もう一度新しい質問を投稿すると、今度はすぐさま質問の一覧に追加されるはずです。
 
 ### 3. 質問を更新する
+
+既存の質問を更新するための API を実装しましょう。 \`put_question\` 関数を実装します。ほぼ \`add_question\` と同じですが、パラメータとして渡ってきた \`id\` を Elasticsearch にも渡すようにしましょう:
+
+\`\`\`python
+return es.index(index=qa_index, id=id, document=jsonable_encoder(question), refresh="wait_for")
+\`\`\`
+
 ### 4. 質問を検索する
 
-質問を作成
-\`\`\`bash
-curl -i -XPOST localhost:8000/qa/questions/ -H 'Content-Type: application/json' -d '{"timestamp": "2022-07-11T12:17:01+09:00", "user": "${process.env.REACT_APP_KEY}", "tags": ["Python", "Elasticsearch"], "title": "Python クライアント", "body": "Python 用の公式ライブラリはありますか?"}'
-\`\`\`
+最後に、検索部分を実装しましょう。 \`get_questions\` では全件をとりあえず返しました。パラメータとして渡ってきた \`options\` は全く利用していません。画面で入力した検索語やステータスはこの \`options\` で渡ってきます:
 
-質問を取得
-\`\`\`bash
-curl -i -XGET localhost:8000/qa/questions/2KdaFIIBOaP8JqATcdFM -H 'Content-Type: application/json'
-\`\`\`
+- options.query: 入力された検索語
+- options.user: QA アプリを操作しているユーザ
+- options.status: 質問のステータス、 open, closed
 
-質問を全件取得
-\`\`\`bash
-curl -i -XGET localhost:8000/qa/questions -H 'Content-Type: application/json'
-\`\`\`
+これらのパラメータを利用して \`es.search\` で \`query\` を指定するようにしてください。
+また、質問を新しい順に並び替えるようにしましょう。
 
-質問を検索
-\`\`\`bash
-curl -i -XGET localhost:8000/qa/questions -H 'Content-Type: application/json' -d '{"query": "タイムスタンプ"}'
-\`\`\`
+- 検索窓に入力された検索語は複数のフィールドに対してマッチングが必要です、 [multi_match](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html) を使います
+- 検索語に加え、ユーザ、ステータスでも検索する必要があります、複数の検索条件を組み合わせるには [bool](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-bool-query.html) クエリを使います
+- 検索結果のソートには \`sort\` を指定します
+- 利用可能なパラメータの詳細は [Elasticsearch REST API](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html) や [Python Elasticsearch client](https://elasticsearch-py.readthedocs.io/en/latest/api.html#elasticsearch.Elasticsearch.search) のドキュメントを参考にしましょう。
 
-質問を検索 (POST)
-\`\`\`bash
-curl -i -XPOST localhost:8000/qa/questions/_search -H 'Content-Type: application/json' -d '{"query": "タイムスタンプ"}'
-\`\`\`
-
+模範解答は \`python/main_solution.py\` に記載されています。
 
 
 `}</EuiMarkdownFormat>

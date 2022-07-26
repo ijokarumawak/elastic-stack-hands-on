@@ -46,13 +46,13 @@ class SearchOptions(BaseModel):
 
 @app.post("/qa/questions")
 def add_question(question: Question):
-    resp = es.index(index=qa_index, refresh="wait_for", document=jsonable_encoder(question))
+    resp = es.index(index=qa_index, document=jsonable_encoder(question), refresh="wait_for")
     return resp
 
 
 @app.put("/qa/questions/{id}")
-def add_question(id, question: Question):
-    resp = es.index(index=qa_index, id=id, refresh="wait_for", document=jsonable_encoder(question))
+def put_question(id, question: Question):
+    resp = es.index(index=qa_index, id=id, document=jsonable_encoder(question), refresh="wait_for")
     return resp
 
 
@@ -64,12 +64,8 @@ def get_question(id):
 
 @app.post("/qa/questions/_search")
 def get_questions(options: SearchOptions):
-    return search_questions(options)
-
-
-def search_questions(options: Union[SearchOptions, None] = None):
     must = []
-    filter = []
+    filters = []
     if options:
         if options.query:
             must.append({"multi_match": {
@@ -84,16 +80,16 @@ def search_questions(options: Union[SearchOptions, None] = None):
             }})
 
         if options.user:
-            filter.append({"match": {
+            filters.append({"match": {
                 "user": options.user
             }})
 
         if options.status:
-            filter.append({"match": {
+            filters.append({"match": {
                 "status": options.status
             }})
 
     resp = es.search(index=qa_index, sort=[{"timestamp": {"order": "desc"}}],
-                     query={"bool": {"must": must, "filter": filter}})
+                     query={"bool": {"must": must, "filter": filters}})
     return resp
 

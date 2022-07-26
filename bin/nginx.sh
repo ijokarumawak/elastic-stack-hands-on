@@ -23,7 +23,7 @@ if [ $? -eq 0 ]; then
 fi
 
 echo "Creating a docker container ${CONTAINER_NAME}..."
-docker run --rm --name ${CONTAINER_NAME} $network -d -p 8001:80 \
+docker run --rm --name ${CONTAINER_NAME} $network -d -p 80:80 \
   --volume="$(pwd)/nginx/templates-$target:/etc/nginx/templates:ro" \
   --volume="$(pwd)/nginx/auth:/etc/nginx/auth:ro" \
   --label co.elastic.logs/module=nginx \

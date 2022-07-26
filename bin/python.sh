@@ -12,6 +12,7 @@ fi
 
 echo "Creating a docker container ${CONTAINER_NAME}..."
 docker run --rm --name ${CONTAINER_NAME} --network es-hands-on -d \
+--volume="$(pwd)/python/app:/code/app:ro" \
 --label co.elastic.logs/processors.1.add_fields.target="event" \
 --label co.elastic.logs/processors.1.add_fields.fields.dataset='${data.container.name}' \
 -e ELASTIC_CLOUD_ID=${ELASTIC_CLOUD_ID} \

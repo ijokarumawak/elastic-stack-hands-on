@@ -171,17 +171,6 @@ function QuestionEditor(props) {
           <EuiMarkdownEditor value={body} onChange={setBody} />
         </EuiForm>
       )
-      if (questionId) {
-        commentForm = (
-          <>
-            <EuiSpacer />
-            <EuiTitle size="m"><h2>回答</h2></EuiTitle>
-            <EuiSpacer />
-
-            <EuiMarkdownEditor value={comment} onChange={setComment} />
-          </>
-        )
-      }
     } else {
       questionForm = (
         <>
@@ -201,6 +190,17 @@ function QuestionEditor(props) {
       )
     }
 
+    if (questionId) {
+      commentForm = (
+        <>
+          <EuiSpacer />
+          <EuiTitle size="m"><h2>回答</h2></EuiTitle>
+          <EuiSpacer />
+
+          <EuiMarkdownEditor value={comment} onChange={setComment} />
+        </>
+      )
+    }
 
     flyout = (
 <EuiFlyout

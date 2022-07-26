@@ -50,16 +50,12 @@ def add_question(question: Question):
 
 
 @app.put("/qa/questions/{id}")
-def add_question(id, question: Question):
-    return {"message": "Not implemented yet."}
-
-
-@app.get("/qa/questions/{id}")
-def get_question(id):
+def put_question(id, question: Question):
     return {"message": "Not implemented yet."}
 
 
 @app.post("/qa/questions/_search")
 def get_questions(options: SearchOptions):
     return {"message": "Not implemented yet."}
+
 
