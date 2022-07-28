@@ -4,9 +4,9 @@ target=$1
 if [ $# -eq 0 ]; then
   echo "e.g. nginx.sh target. where target is either 'local' or 'docker'."
   exit 1
-elif [ $target == "local" ]; then
+elif [ $target = "local" ]; then
   network=""
-elif [ $target == "docker" ]; then
+elif [ $target = "docker" ]; then
   network=" --network es-hands-on"
 else
   echo "e.g. nginx.sh target. where target is either 'local' or 'docker'."
