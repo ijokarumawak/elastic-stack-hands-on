@@ -1,6 +1,4 @@
-import React, {useState, useEffect, Fragment} from 'react';
-import example from "./example";
-import Mermaid from '../Mermaid';
+import React, {Fragment} from 'react';
 
 import {
   EuiMarkdownFormat

@@ -1,5 +1,4 @@
-import React, {useState, useEffect, Fragment} from 'react';
-import example from "./example";
+import React, {Fragment} from 'react';
 import Mermaid from '../Mermaid';
 
 import {

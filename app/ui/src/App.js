@@ -14,6 +14,8 @@ import Intro from './Intro.js'
 import Setup from './Setup.js'
 import ElasticsearchDocument from './elasticsearch/Document.js'
 import ElasticsearchIndex from './elasticsearch/Index.js'
+import ElasticsearchQuery from './elasticsearch/Query.js'
+import ElasticsearchAggregation from './elasticsearch/Aggregation.js'
 import ElasticsearchMapping from './elasticsearch/Mapping.js'
 import KibanaDiscover from './kibana/Discover.js'
 import KibanaLens from './kibana/Lens.js'
@@ -46,7 +48,6 @@ import {
   EuiSelect,
   EuiBadge,
   EuiButtonIcon,
-  EuiMarkdownFormat,
   EuiSpacer,
   EuiShowFor,
   htmlIdGenerator
@@ -105,20 +106,22 @@ const contents = [
   ]},
   {title: 'Elasticsearch', contents: [
     {location: '/doc/elasticsearch/document', title: 'ドキュメント', tag: <ElasticsearchDocument />},
+    {location: '/doc/elasticsearch/query', title: 'クエリ', tag: <ElasticsearchQuery />},
+    {location: '/doc/elasticsearch/aggregation', title: 'アグリゲーション', tag: <ElasticsearchAggregation />},
     {location: '/doc/elasticsearch/index', title: 'インデックス', tag: <ElasticsearchIndex />},
     {location: '/doc/elasticsearch/mapping', title: 'マッピング', tag: <ElasticsearchMapping />},
-  ]},
-  {title: 'Kibana', contents: [
-    {location: '/doc/kibana/discover', title: 'Discover', tag: <KibanaDiscover />},
-    {location: '/doc/kibana/lens', title: 'Lens', tag: <KibanaLens />},
-    {location: '/doc/kibana/dashboard', title: 'ダッシュボード', tag: <KibanaDashboard />},
-    {location: '/doc/kibana/samples', title: 'サンプルデータセット', tag: <KibanaSampleDataSet />},
   ]},
   {title: 'Python', contents: [
     {location: '/doc/python/intro', title: 'カスタムアプリケーション', tag: <PythonIntro />},
     {location: '/doc/python/qa_requirements', title: 'QA アプリ要件', tag: <PythonQARequirements />},
     {location: '/doc/python/qa_development', title: 'QA アプリ開発', tag: <PythonQADevelopment />},
     {location: '/doc/python/qa', title: 'QA アプリ', tag: <PythonQA />}
+  ]},
+  {title: 'Kibana', contents: [
+    {location: '/doc/kibana/discover', title: 'Discover', tag: <KibanaDiscover />},
+    {location: '/doc/kibana/lens', title: 'Lens', tag: <KibanaLens />},
+    {location: '/doc/kibana/dashboard', title: 'ダッシュボード', tag: <KibanaDashboard />},
+    {location: '/doc/kibana/samples', title: 'サンプルデータセット', tag: <KibanaSampleDataSet />},
   ]},
   {title: 'Beats', contents: [
     {location: '/doc/filebeat/simple', title: 'Filebeat', tag: <FilebeatSimple />},
@@ -220,7 +223,7 @@ function Footer() {
   </div>);
 }
 
-function SideNav() {
+function SideNav(props) {
   const [isSideNavOpenOnMobile, setisSideNavOpenOnMobile] = useState(false);
 
   const toggleOpenOnMobile = () => {
@@ -237,6 +240,7 @@ function SideNav() {
         return {
           name: v.title,
           id: htmlIdGenerator('navi')(),
+          isSelected: v.location === props.currentLocation,
           onClick: () => {
             moveTo(navigate, v.location);
           }
@@ -318,7 +322,7 @@ function App() {
             return (
               <Route key={i} path={v.location} element={
               <React.Fragment>
-                  <EuiPageTemplate pageSideBar={<SideNav />}>
+                  <EuiPageTemplate pageSideBar={<SideNav currentLocation={v.location} />}>
                     <Navi />
                     <EuiSpacer />
                     {v.tag}

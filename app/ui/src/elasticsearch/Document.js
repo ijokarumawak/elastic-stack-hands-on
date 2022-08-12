@@ -36,7 +36,8 @@ PUT es-hands-on-${process.env.REACT_APP_KEY}/_doc/1
 {
   "@timestamp": "${today}T10:00:00+09:00",
   "labels.api": "PUT _doc",
-  "message": "ドキュメント 1 を保存"
+  "message": "ドキュメント 1 を保存",
+  "value": 1
 }
 \`\`\`
 
@@ -51,7 +52,8 @@ POST es-hands-on-${process.env.REACT_APP_KEY}/_doc
 {
   "@timestamp": "${today}T10:00:00+09:00",
   "labels.api": "POST _doc",
-  "message": "ID を指定せずにドキュメントを保存"
+  "message": "ID を指定せずにドキュメントを保存",
+  "value": 9
 }
 \`\`\`
 
@@ -59,9 +61,9 @@ POST es-hands-on-${process.env.REACT_APP_KEY}/_doc
 \`\`\`json
 POST es-hands-on-${process.env.REACT_APP_KEY}/_bulk
 {"index":{"_id":2}}
-{"@timestamp": "${today}T10:00:00+09:00", "labels.api": "_bulk", "message":"バルクで複数更新処理を一括実行"}
+{"@timestamp": "${today}T10:00:00+09:00", "labels.api": "_bulk", "message":"バルクで複数更新処理を一括実行", "value": 200}
 {"index":{"_id":3}}
-{"@timestamp": "${today}T11:00:00+09:00", "labels.api": "_bulk", "message":"複数のドキュメントを効率的に保存"}
+{"@timestamp": "${today}T11:00:00+09:00", "labels.api": "_bulk", "message":"複数のドキュメントを効率的に保存", "value": 30}
 {"index":{"_id":4}}
 {"@timestamp": "${today}T12:00:00+09:00", "labels.api": "_bulk", "message":"削除や更新も実行できる"}
 {"delete": {"_id":4}}
@@ -84,9 +86,12 @@ GET es-hands-on-${process.env.REACT_APP_KEY}/_search
 }
 \`\`\`
 
+検索リクエストのボディで渡した JSON オブジェクトのことを Query DSL と言います。 Elasticsearch では色々なクエリ方法がありますが Query DSL が最もネイティブなクエリ言語です。次のページでは Query DSL の詳細をみていきます。
+
 ## Challenge!
 
-- Elasticsearch の [API リファレンス](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs.html)をみてみましょう
+- Elasticsearch の [Document API リファレンス](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs.html) をみてみましょう
+- Elasticsearch の [Search API リファレンス](https://www.elastic.co/guide/en/elasticsearch/reference/current/search.html) をみてみましょう
 
 `}</EuiMarkdownFormat>
 </>

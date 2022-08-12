@@ -5,6 +5,8 @@ function Mapping() {
 <>
 <EuiMarkdownFormat>{`
 
+Elasticsearch には色々なデータ型や、 Runtime フィールド、 Dynamic マッピングなどさまざまなトピックがあります。詳細は [Mapping の公式ドキュメント](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html) も参照してください。
+
 ## 二つの文字列型、 text と keyword
 Elasticsearch を使いこなす上で、避けて通れないのが、 \`text\` と \`keyword\` 型の違いです。
 簡単に言うと:
