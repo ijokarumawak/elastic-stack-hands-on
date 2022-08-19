@@ -11,6 +11,7 @@ function QADevelopment() {
 <EuiMarkdownFormat>{`
 ## QA アプリ Python API
 
+Python API は自動リロード対応にしてあります。ローカルのファイルを更新し、保存するだけで更新できます。次のページの [QA アプリ](/doc/python/qa) を別のウィンドウで開き、確認しながら進めるとよいでしょう。
 \`python/app/main.py\` に API の実装を追加していきます。
 
 Elasticsearch への接続部分はすでに実装されています。 \`env.sh\` に設定した環境変数を使ってアクセスするようになっています。この \`es\` を使って Elasticsearch の API を呼び出しましょう。
@@ -37,8 +38,7 @@ JSON への変換は \`jsonable_encoder\` を使います。インデックス�
 return es.index(index=qa_index, document=jsonable_encoder(question))
 \`\`\`
 
-Python API は自動リロード対応にしてあります。ファイルを保存するだけで更新できます。
-これで QA アプリの画面から新しい質問が送信できるようになりました。ですが、質問を取得する API をまだ実装していないので画面には保存した質問は表示されません。
+これで QA アプリの画面から新しい質問が送信できるようになりました。ですが、質問を取得する API をまだ実装していないので画面には保存した質問は表示されません。しかし、ドキュメントとしてはインデックスに保存されているので Kibana のコンソールからは直接確認できるでしょう。
 
 ### 2. 質問を取得する
 

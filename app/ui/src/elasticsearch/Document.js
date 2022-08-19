@@ -30,7 +30,9 @@ flowchart LR
 
 <EuiMarkdownFormat>{`
 
-次の API を Kibana コンソールから実行しましょう:
+ハンズオンで利用するインデックス名には、他の方と被らないように \`env.sh\` の \`HANDS_ON_KEY\` が末尾に付与されています。 env.sh で設定した値になっているか確認してから進めましょう。ハンズオンの環境を他の方と共有している場合、もし末尾が \`default\` となっているなら、 [環境のセットアップ](/doc/setup) のハンズオンアプリの接続先設定を再度確認してみてください。
+
+次の API を Kibana コンソールから実行しましょう。 Elasticsearch のインデックスにドキュメントを保存します。:
 \`\`\`json
 PUT es-hands-on-${process.env.REACT_APP_KEY}/_doc/1
 {

@@ -142,13 +142,15 @@ PUT _security/user/es-hands-on
 ### ハンズオンアプリの接続先設定
 
 作成したユーザと接続先の情報をハンズオンアプリにも設定しましょう。
-*bin/env.sh* で:
+*env.sh* で:
 - 接続先 Elastic Cloud デプロイメントの \`ELASTIC_CLOUD_ID\` を指定してください。 Cloud Id は Elastic Cloud 管理コンソールで取得できます。
+- 接続先 Elastic Cloud デプロイメントの \`KIBANA_HOST\` を指定してください。こちらも Elastic Cloud 管理コンソールから、 Kibana の \`Copy endpoint\` で取得できます。コピーした値を貼り付け、 \`https:\` と、 \`:9243\` のポート部分を削除し、ホストの FQDN のみにしてください。
 - \`HANDS_ON_KEY\` にハンズオン環境内でユニークな値を入力してください、これは同一の Elasticsearch クラスタを複数名でシェアする際に他の参加者の方と作業が重複しないためのものです。ご自身の環境を使っている場合は \`default\` のままで構いません。
 
-その後、接続情報を反映させるため、次のコマンドで API サーバを再起動しましょう:
+その後、接続情報を反映させるため、次のコマンドでハンズオン環境を再起動しましょう。 UI のデプロイが完了するまで少し時間を置いてから、このページをリロードして続きを再開してください:
 
 \`\`\`json
+bin/app-ui.sh
 bin/app-api.sh
 bin/python.sh
 \`\`\`

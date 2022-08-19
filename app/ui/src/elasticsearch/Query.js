@@ -10,7 +10,7 @@ function Query() {
 <EuiMarkdownFormat>{`
 ## Elasticsearch の検索の仕組み
 
-Elasticsearch は内部で Apache Lucene という検索エンジン用ライブラリを利用しています。
+Elasticsearch は内部で [Apache Lucene](https://lucene.apache.org/) という検索エンジン用ライブラリを利用しています。
 
 - Elasticsearch の shard は Lucene のインスタンス
 - Lucene のデータは Segment と呼ばれる、ディスク上に永続化されたデータ
@@ -31,13 +31,15 @@ Elasticsearch は内部で Apache Lucene という検索エンジン用ライブ
 <Mermaid chart={`
 flowchart LR
     Client--write-->Shard
-    Shard--write-->MemoryBuffer
-    MemoryBuffer--refresh-->Segment2
-    subgraph Lucene
-      Segment1
-      Segment2
-      Segment1--merge-->Segment3
-      Segment2--merge-->Segment3
+    subgraph Elasticsearch
+      Shard--write-->MemoryBuffer
+      MemoryBuffer--refresh-->Segment2
+      subgraph Lucene
+        Segment1
+        Segment2
+        Segment1--merge-->Segment3
+        Segment2--merge-->Segment3
+      end
     end
 `} />
 
@@ -50,21 +52,25 @@ flowchart LR
 <Mermaid chart={`
 flowchart LR
     Client--get-->Shard
-    Shard--get-->MemoryBuffer
+    subgraph Elasticsearch
+      Shard--get-->MemoryBuffer
+    end
 `} />
 
 <EuiMarkdownFormat>{`
 
-\`GET {index-name}/_search\` API を利用する場合は Lucene を見にいくことになります。ドキュメントがインデックスされても、 Lucene の Segment が生成される (refresh される) までは、検索結果に新しいドキュメントは現れません。
+\`GET {index-name}/_search\` API を利用する場合は Lucene を参照することになります。ドキュメントがインデックスされても、 Lucene の Segment が生成される (refresh される) までは、検索結果に新しいドキュメントは現れません。
 
 `}</EuiMarkdownFormat>
 
 <Mermaid chart={`
 flowchart LR
     Client--search-->Shard
-    Shard--search-->Segments
-    subgraph Lucene
-      Segments
+    subgraph Elasticsearch
+      Shard--search-->Segments
+      subgraph Lucene
+        Segments
+      end
     end
 `} />
 
@@ -182,7 +188,9 @@ POST _analyze
 |行|2|
 |複|2, 3|
 
-ユニコードの文字範囲によってカタカナのように連続する語はひとまとまりになったり、漢字やひらがなは一文字になっていたりします。デフォルトの日本語テキスト解析の仕組みは、検索結果は返ってくるけれど、なぜこれがヒットするの？と首を傾げたくなるような挙動となるでしょう。通常、日本語を期待通り検索したい場合、形態素解析や N-Gram といったテクニックを組み合わせて利用します。
+ユニコードの文字範囲によってカタカナのように連続する語はひとまとまりになったり、漢字やひらがなは一文字になっていたりします。デフォルトの日本語テキスト解析の仕組みは、検索結果は返ってくるけれど、なぜこれがヒットするの？と首を傾げたくなるような場合があります。通常、日本語を期待通り検索したい場合、形態素解析や N-Gram といったテクニックを組み合わせて利用します。
+
+日本語に限った話ではありませんが、期待通りに検索できない場合はどんなテキスト解析がされ、どのように転置インデックスが作成されているのかを落ち着いて考えてみるとよいでしょう。
 
 参考ブログ:
 - [Elasticsearchで日本語の全文検索の機能を実装する](https://www.elastic.co/jp/blog/how-to-implement-japanese-full-text-search-in-elasticsearch)
@@ -285,7 +293,7 @@ GET es-hands-on-${process.env.REACT_APP_KEY}/_search
 
 ### Bool クエリ
 
-検索性能を測る尺度として、[適合率と再現率](https://en.wikipedia.org/wiki/Precision_and_recall) (precision and recall) があります。これは求めている情報が正しく返せたかを表ます。
+検索性能を測る尺度として、[適合率と再現率](https://en.wikipedia.org/wiki/Precision_and_recall) (precision and recall) があります。これは求めている情報が正しく返せたかを表します。
 
 Elasticsearch のような全文検索エンジンでは、単に検索語がドキュメントに含まれるかどうかだけでなく、「検索語がどれだけドキュメントにマッチしているか」という関連度が重要になります。検索結果として返されたドキュメントの一覧を関連度でソートし、ユーザーが求めている情報を優先的に返すことが重要です。 Elasticsearch では [\`bool\` クエリ](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-bool-query.html) できめ細やかな検索条件を指定することができます。
 
@@ -301,6 +309,8 @@ Bool クエリでは、役割の異なる 4つの部分で検索条件を指定�
 |filter|filter|含める|関係ない|
 |should|query|関係ない|上がる|
 |must_not|filter|含めない|関係ない|
+
+次のクエリはどんな検索条件になっていますか? どの条件で検索結果に含めるかどうか、その上でどんなドキュメントが上位に来るでしょうか? 簡単な日本語で、「これはこういうクエリです」と説明ができますか? また、検索結果として返されたドキュメントと、順位、スコアを分析してみましょう。
 
 \`\`\`json
 GET es-hands-on-${process.env.REACT_APP_KEY}/_search

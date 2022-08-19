@@ -18,6 +18,7 @@ Elastic スタックの理解を深めるには、色々な情報ソースがあ
 - [Elastic 語りチャンネル](https://stand.fm/channels/5fbf3981c6465465908d4b66) 音声コンテンツでゆるりと情報収集
 - [demo.elastic.co](https://demo.elastic.co/) 誰でも使えるデモ環境、データセットも揃っているので色々な機能を試すことができる
 - [検索システム - 実務者のための開発改善ガイドブック](https://www.lambdanote.com/products/ir-system-ebook)
+- [Osquery for Security Analysis](https://www.networkdefense.co/courses/osquery/)
 
 [back to top](/)
 
