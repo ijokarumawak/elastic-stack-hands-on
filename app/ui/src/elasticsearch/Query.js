@@ -16,7 +16,7 @@ Elasticsearch は内部で [Apache Lucene](https://lucene.apache.org/) という
 - Lucene のデータは Segment と呼ばれる、ディスク上に永続化されたデータ
 - Segment は一度書き込んだら変更できない、インミュータブル
 - 新しいドキュメントは別の Segment に書き込まれる
-- Segment は定期的にマージされる
+- Segment は検索効率を向上させるために、定期的にマージされる
 - Segment には検索、集約を効率的に行うためにさまざまな派生的なデータ構造が作成される:
   - _source: もともとの JSON ドキュメント
   - 二次インデックス: 転置インデックス (inverted index), BKD-trees
@@ -93,7 +93,7 @@ flowchart LR
 転置インデックスは分厚い本の巻末にある単語の索引のようなデータです。その語句が出現するドキュメントを簡単に参照できるようになっています。転置インデックスは元々の文字列から語句を抽出するテキスト解析 (Text Analysis) という処理を行います。 Elasticsearch の \`_analyze\` API を使うとテキスト解析の様子をシミュレートすることができます:
 
 \`\`\`json
-POST _analyze
+POST es-hands-on-${process.env.REACT_APP_KEY}/_analyze
 {
   "text": [
     "How does Elasticsearch search data?"
