@@ -19,7 +19,7 @@ Logstash の設定ファイルは [\`input\`](https://www.elastic.co/guide/en/lo
 ./logstash/simple.sh
 \`\`\`
 
-\`logstash/simple.con\` の設定は次の様になっています。標準入力から入力を受け取り、 \`response\` というフィールドを追加して、標準出力に結果を出力します。
+\`logstash/simple.conf\` の設定は次の様になっています。標準入力から入力を受け取り、 \`response\` というフィールドを追加して、標準出力に結果を出力します。
 
 \`\`\`ruby
 input {

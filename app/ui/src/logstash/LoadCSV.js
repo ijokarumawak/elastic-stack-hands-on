@@ -163,7 +163,7 @@ $ grep ',"-"' logstash/0003410379.csv |wc -l
 \`\`\`
 
 \`\`\`
-GET es-hands-on-00003410379-${process.env.REACT_APP_KEY}/_count
+GET es-hands-on-0003410379-${process.env.REACT_APP_KEY}/_count
 \`\`\`
 
 
