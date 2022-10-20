@@ -103,7 +103,7 @@ GET kibana_sample_data_ecommerce/_search
 
 {sampleQuiz(5, "\"Women's Accessories\" が最も売れた日付は？", (<EuiMarkdownFormat>{`
 ダッシュボードでフィルタを作成し、 \`% of target revenue ($10k)\` チャートで最も売上の高い日を探すと分かります。
-アグリゲーションで見つけるにはこのようなクエリになるでしょう:
+アグリゲーションで見つけるには次のようなクエリになるでしょう。 Kibana は Discover やビジュアリゼーションではブラウザのタイムゾーンに合わせた日付を画面上に表示してくれています。アグリゲーションを直接実行する場合は、 \`date_histogram\` でタイムゾーンの指定を行うのがミソですね。指定しないと UTC の日付となり、時差の関係で期待の日付とズレることがあります:
 \`\`\`json
 GET kibana_sample_data_ecommerce/_search
 {
@@ -124,6 +124,7 @@ GET kibana_sample_data_ecommerce/_search
       "date_histogram": {
         "field": "order_date",
         "calendar_interval": "1d",
+        "time_zone": "+09:00",
         "order": {
           "sales": "desc"
         }
@@ -151,7 +152,7 @@ Elasticsearch ではオブジェクトの配列内のフィールドを、オブ
 このようにオブジェクトが要素となる配列があり、要素ごとのオブジェクトのかたまりを意識して扱う必要がある場合、 [\`nested\`](https://www.elastic.co/guide/en/elasticsearch/reference/current/nested.html) タイプを使います。まず、 \`products\` が \`nested\` 型であるとマッピングで宣言します。既存フィールドのマッピングを変更するので、別インデックス作成、 \`reindex\` が必要です。
 
 \`\`\`json
-PUT kibana_sample_data_ecommerce_nested
+PUT es-hands-on-${process.env.REACT_APP_KEY}-ecommerce-nested
 {
   "mappings": {
     "properties": {
@@ -182,13 +183,13 @@ POST _reindex
     "index": "kibana_sample_data_ecommerce"
   },
   "dest": {
-    "index": "kibana_sample_data_ecommerce_nested"
+    "index": "es-hands-on-${process.env.REACT_APP_KEY}-ecommerce-nested"
   }
 }
 \`\`\`
 
 \`\`\`json
-GET kibana_sample_data_ecommerce_nested/_search
+GET es-hands-on-${process.env.REACT_APP_KEY}-ecommerce-nested/_search
 {
   "query": {
     "nested": {
@@ -211,6 +212,7 @@ GET kibana_sample_data_ecommerce_nested/_search
       "date_histogram": {
         "field": "order_date",
         "calendar_interval": "1d",
+        "time_zone": "+09:00",
         "order": {
           "products>category>sum": "desc"
         }

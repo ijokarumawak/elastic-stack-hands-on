@@ -97,6 +97,15 @@ PUT _security/role/es-hands-on
       "field_security" : {
         "grant" : ["*"]
       }
+    },
+    {
+      "names" : [
+        "kibana_sample_data_ecommerce"
+      ],
+      "privileges" : ["read", "monitor", "view_index_metadata"],
+      "field_security" : {
+        "grant" : ["*"]
+      }
     }
   ],
   "applications" : [
